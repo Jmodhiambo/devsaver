@@ -3,7 +3,7 @@
 
 from app.test.conftest import db_session
 from app.models.user import User
-from app.test.models.conftest import sample_user
+# from app.test.models.conftest import sample_user
 from app.test.factories.user_factory import UserFactory
 
 
