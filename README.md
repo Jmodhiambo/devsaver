@@ -23,7 +23,7 @@ It includes a CRUD API with proper test isolation using factories (`factory_boy`
 
    ```bash
    git clone https://github.com/Jmodhiambo/devsaver
-   cd your-repo
+   cd devsaver
    ```
 
 2. Create a virtual environment and activate it:
