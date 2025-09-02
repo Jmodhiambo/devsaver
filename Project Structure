@@ -1,0 +1,42 @@
+E:\DevSaver\
+│── app\
+│   ├── __init__.py
+│   ├── run.py
+│   │
+│   ├── models\
+│   │   ├── __init__.py
+│   │   ├── crud_user.py
+│   │   ├── user.py
+│   │   └── engine\
+│   │       ├── __init__.py
+│   │       ├── db.py
+│   │       └── mapping.py
+│   │
+│   ├── cli\
+│   │   ├── __init__.py
+│   │   └── commands.py
+│   │
+│   └── utils\
+│       ├── __init__.py
+│       └── helpers.py
+│
+├── inspect_db.py
+├── requirements.txt
+└── README.md
+
+
+
+
+devsaver/
+├── app/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── routes.py
+│   └── utils.py
+├── migrations/
+├── instance/
+│   └── config.py
+├── .env
+├── run.py
+├── requirements.txt
+└── README.md
