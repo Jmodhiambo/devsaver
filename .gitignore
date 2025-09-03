@@ -14,3 +14,6 @@ build/
 # Unit test / coverage reports
 .coverage
 .pytest_cache/
+
+# Keeping out requirements file for now
+requirements.txt
