@@ -4,8 +4,8 @@ CLI for DevSaver.
 """
 
 import argparse
-from app.models.crud_user import create_user, get_user_by_username
-from app.models.crud_resource import (
+from app.models.user_crud import create_user, get_user_by_username
+from app.models.resource_crud import (
     create_resource,
     get_resources_by_user,
     search_resources,

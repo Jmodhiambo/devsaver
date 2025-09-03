@@ -3,19 +3,27 @@
 
 from app.models.engine.db import get_session
 from app.models.resource import Resource
-from typing import List
+from typing import List, Optional
  
-def create_resource(title: str, description: str, tags: str, type: str, url:str, source: str, user_id: int) -> Resource:
+def create_resource(
+        title: str,
+        type: str,
+        source: str,
+        user_id: int,
+        description: Optional[str] = None,
+        tags: Optional[str] = None,
+        url: Optional[str] = None,
+) -> Resource:
     """Create a new resource in the database."""
     with get_session() as session:
-        new_resource = Resource(
+        new_resource = Resource(            
             title=title,
             description=description,
             tags=tags,
             type=type,
             source=source,
             url=url,
-            user_id=user_id
+            user_id=user_id,
         )
         session.add(new_resource)
         session.flush() # forces INSERT so id is assigned
