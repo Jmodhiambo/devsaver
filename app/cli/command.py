@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
 """
-CLI for DevSaver.
+CLI for DevSaver (via service layer).
 """
 
 import argparse
-from app.models.user_crud import create_user, get_user_by_username
-from app.models.resource_crud import (
-    create_resource,
-    get_resources_by_user,
-    search_resources,
-    mark_resource_as_read,
-    toggle_star_resource
+from app.services.user_services import (
+    register_user,
+    get_user_by_username_service,
+    list_all_users,
+    remove_user,
+    update_user_profile,
+)
+from app.services.resource_services import (
+    add_resource,
+    list_resources_by_user,
+    search_for_resources,
+    mark_as_read,
+    toggle_star,
 )
 
 
@@ -27,10 +33,22 @@ def main():
     user_parser.add_argument("--username", required=True, help="Username of the user")
     user_parser.add_argument("--email", required=True, help="Email of the user")
     user_parser.add_argument("--password", required=True, help="Password (plain text for now)")
+    user_parser.add_argument("--fullname", required=False, help="Full name")
 
     get_user_parser = subparsers.add_parser("get-user", help="Get user details by username")
-    get_user_parser.add_argument("--username", required=True, help="Username of the user")  
-    
+    get_user_parser.add_argument("--username", required=True, help="Username of the user")
+
+    list_users_parser = subparsers.add_parser("list-users", help="List all users")
+
+    delete_user_parser = subparsers.add_parser("delete-user", help="Delete a user")
+    delete_user_parser.add_argument("--user-id", required=True, type=int, help="User ID")
+
+    update_user_parser = subparsers.add_parser("update-user", help="Update a user profile")
+    update_user_parser.add_argument("--user-id", required=True, type=int, help="User ID")
+    update_user_parser.add_argument("--email", help="New email")
+    update_user_parser.add_argument("--password", help="New password")
+    update_user_parser.add_argument("--fullname", help="New full name")
+
     # --------------------
     # RESOURCE COMMANDS
     # --------------------
@@ -40,7 +58,7 @@ def main():
     add_res_parser.add_argument("--tags", required=False, default="", help="Comma-separated tags")
     add_res_parser.add_argument("--type", required=True, help="Type of resource (e.g., article, video)")
     add_res_parser.add_argument("--source", required=True, help="Source/URL")
-    add_res_parser.add_argument("--url", required=False, help="Date created (string for now)")
+    add_res_parser.add_argument("--url", required=False, help="Resource URL")
     add_res_parser.add_argument("--user-id", required=True, type=int, help="User ID")
 
     list_res_parser = subparsers.add_parser("list-resources", help="List resources for a user")
@@ -61,47 +79,63 @@ def main():
     # --------------------
     args = parser.parse_args()
 
-    if args.command == "create-user":
-        user = create_user(args.username, args.email, args.password)
-        print(f"✅ User created: {user}")
+    try:
+        if args.command == "create-user":
+            user = register_user(args.username, args.email, args.password, args.fullname)
+            print(f"✅ User created: {user}")
 
-    elif args.command == "get-user":
-        user = get_user_by_username(args.username)
-        if user:
-            print(user)
-        else:
-            print("❌ User not found.")
+        elif args.command == "get-user":
+            user = get_user_by_username_service(args.username)
+            print(user if user else "User not found.")
 
-    elif args.command == "add-resource":
-        res = create_resource(
-            title=args.title,
-            description=args.desc,
-            tags=args.tags,
-            type=args.type,
-            source=args.source,
-            url=args.url,
-            user_id=args.user_id
-        )
-        print(f"✅ Resource added: {res}")
+        elif args.command == "list-users":
+            users = list_all_users()
+            for u in users:
+                print(u)
+            return users
 
-    elif args.command == "list-resources":
-        resources = get_resources_by_user(args.user_id)
-        for r in resources:
-            print(r)
+        elif args.command == "delete-user":
+            success = remove_user(args.user_id)
+            print("✅ User deleted." if success else "❌ Failed to delete user.")
 
-    elif args.command == "search":
-        resources = search_resources(args.user_id, args.query)
-        for r in resources:
-            print(r)
+        elif args.command == "update-user":
+            updated = update_user_profile(
+                args.user_id,
+                email=args.email,
+                password=args.password,
+                fullname=args.fullname,
+            )
+            print(f"✅ User updated: {updated}" if updated else "❌ User not found.")
 
-    elif args.command == "mark-read":
-        res = mark_resource_as_read(args.resource_id)
-        print(f"✅ Marked as read: {res}")
+        elif args.command == "add-resource":
+            res = add_resource(
+                title=args.title,
+                description=args.desc,
+                tags=args.tags,
+                type=args.type,
+                source=args.source,
+                url=args.url,
+                user_id=args.user_id,
+            )
+            print(f"✅ Resource added: {res}")
 
-    elif args.command == "toggle-star":
-        res = toggle_star_resource(args.resource_id)
-        print(f"⭐ Star toggled: {res}")
+        elif args.command == "list-resources":
+            resources = list_resources_by_user(args.user_id)
+            for r in resources:
+                print(r)
 
+        elif args.command == "search":
+            resources = search_for_resources(args.user_id, args.query)
+            for r in resources:
+                print(r)
 
-if __name__ == "__main__":
-    main()
+        elif args.command == "mark-read":
+            res = mark_as_read(args.resource_id)
+            print(f"✅ Marked as read: {res}")
+
+        elif args.command == "toggle-star":
+            res = toggle_star(args.resource_id)
+            print(f"⭐ Star toggled: {res}")
+
+    except Exception as e:
+        print(f"❌ Error: {e}")

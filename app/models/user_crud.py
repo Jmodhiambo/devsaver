@@ -3,19 +3,17 @@
 
 from app.models.engine.db import get_session
 from app.models.user import User
+from typing import Optional
 
-def create_user(username: str, email: str, password_hash: str) -> User:
+def create_user(username: str, email: str, password_hash: str, fullname: Optional[str]) -> User:
     """Create a new user in the database."""
     with get_session() as session:
-        existing = session.query(User).filter_by(username=username).first()
-        if existing:
-            raise ValueError(f"Username '{username}' is already taken.")
-
-        new_user = User(username=username, email=email, password_hash=password_hash)
+        new_user = User(username=username, email=email, password_hash=password_hash, fullname=fullname)
         session.add(new_user)
-        session.flush()           # forces INSERT so id is assigned
+        session.commit()           # INSERT so id is assigned
         session.refresh(new_user) # reloads from db
         # session.expunge(new_user) No need to expunge here as we are returning the dict
+        print(f"DEBUG: Created user object type = {type(new_user)}")
          
         return new_user.to_dict()
     
@@ -67,7 +65,9 @@ def list_users() -> list[User]:
     """List all users in the database."""
     with get_session() as session:
         users = session.query(User).all()
+        print(f"DEBUG: Found {len(users)} users")
         for user in users:
             session.refresh(user)
             # session.expunge(user)  # detach safely
-        return users.to_dict() if users else []
+        #return users.to_dict() if users else []
+        return [user.to_dict() for user in users] if users else []

@@ -9,14 +9,14 @@ from app.models.user_crud import (
     get_user_by_id, update_user, delete_user, list_users
 )
 
-def register_user(username: str, email: str, password: str) -> dict:
+def register_user(username: str, email: str, password: str, fullname: Optional[str]) -> dict:
     """Register a new user with unique username and email."""
     if get_user_by_username(username):
-        raise ValueError("Username already exists")
+        raise ValueError(f"The username '{username}' is already taken")
     if get_user_by_email(email):
         raise ValueError("Email already exists")
     password_hash = argon2.hash(password)
-    return create_user(username, email, password_hash)
+    return create_user(username, email, password_hash, fullname)
 
 def authenticate_user(username: str, password: str) -> Optional[dict]:
     """Authenticate a user by username and password."""
