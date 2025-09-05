@@ -35,8 +35,6 @@ def get_resources_by_user(user_id: int) -> List[Resource]:
     """Retrieve all resources for a given user."""
     with get_session() as session:
         resources = session.query(Resource).filter(Resource.user_id == user_id).all()
-        for resource in resources:
-            session.refresh(resource)
         return [res.to_dict() for res in resources]
     
 def update_resource(resource_id: int, **kwargs) -> Resource | None:

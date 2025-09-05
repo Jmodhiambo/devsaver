@@ -5,7 +5,7 @@ from app.models.engine.db import get_session
 from app.models.user import User
 from typing import Optional
 
-def create_user(username: str, email: str, password_hash: str, fullname: Optional[str]) -> User:
+def create_user(username: str, email: str, password_hash: str, fullname: Optional[str] = None) -> User:
     """Create a new user in the database."""
     with get_session() as session:
         new_user = User(username=username, email=email, password_hash=password_hash, fullname=fullname)
@@ -13,7 +13,6 @@ def create_user(username: str, email: str, password_hash: str, fullname: Optiona
         session.commit()           # INSERT so id is assigned
         session.refresh(new_user) # reloads from db
         # session.expunge(new_user) No need to expunge here as we are returning the dict
-        print(f"DEBUG: Created user object type = {type(new_user)}")
          
         return new_user.to_dict()
     
@@ -21,7 +20,7 @@ def get_user_by_username(username: str) -> User | None:
     """Retrieve a user by their username."""
     with get_session() as session:
         user = session.query(User).filter(User.username == username).first()
-        session.refresh(user)
+        # session.refresh(user)
         # session.expunge(user)  # detach safely
         return user.to_dict() if user else None
     
@@ -35,7 +34,6 @@ def get_user_by_id(user_id: int) -> User | None:
     """Retrieve a user by their ID."""
     with get_session() as session:
         user = session.query(User).filter(User.id == user_id).first()
-        session.refresh(user)
         return user.to_dict() if user else None
     
 def update_user(user_id: int, **kwargs) -> User | None:
@@ -46,7 +44,7 @@ def update_user(user_id: int, **kwargs) -> User | None:
             for key, value in kwargs.items():
                 setattr(user, key, value)
             session.add(user)
-            session.flush()
+            session.commit()
             session.refresh(user) # reloads from db
             # session.expunge(user)  # detach safely
             return user.to_dict()

@@ -99,12 +99,16 @@ def main():
             print("✅ User deleted." if success else "❌ Failed to delete user.")
 
         elif args.command == "update-user":
-            updated = update_user_profile(
-                args.user_id,
-                email=args.email,
-                password=args.password,
-                fullname=args.fullname,
-            )
+            fields = {
+                "email": args.email,
+                "password": args.password,
+                "fullname": args.fullname,
+            }
+
+            # Remove keys where user did not provide new values
+            update_fields = {k: v for k, v in fields.items() if v is not None}
+
+            updated = update_user_profile(args.user_id, **update_fields)
             print(f"✅ User updated: {updated}" if updated else "❌ User not found.")
 
         elif args.command == "add-resource":

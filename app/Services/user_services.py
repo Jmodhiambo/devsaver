@@ -9,10 +9,14 @@ from app.models.user_crud import (
     get_user_by_id, update_user, delete_user, list_users
 )
 
-def register_user(username: str, email: str, password: str, fullname: Optional[str]) -> dict:
+def register_user(username: str, email: str, password: str, fullname: Optional[str] = None) -> dict:
     """Register a new user with unique username and email."""
     if get_user_by_username(username):
         raise ValueError(f"The username '{username}' is already taken")
+    
+    if '@' not in email or '.' not in email:
+        raise ValueError("Invalid email format")
+    
     if get_user_by_email(email):
         raise ValueError("Email already exists")
     password_hash = argon2.hash(password)
@@ -31,6 +35,18 @@ def get_user_profile(user_id: int) -> Optional[dict]:
 
 def update_user_profile(user_id: int, **kwargs) -> Optional[dict]:
     """Update user profile."""
+    if 'email' in kwargs:
+        if '@' not in kwargs['email'] or '.' not in kwargs['email']:
+            raise ValueError("Invalid email format!")
+        existing_user = get_user_by_email(kwargs['email'])
+        if existing_user and existing_user['id'] != user_id:
+            raise ValueError("Email already exists!")
+        
+    if 'username' in kwargs:
+        existing_user = get_user_by_username(kwargs['username'])
+        if existing_user and existing_user['id'] != user_id:
+            raise ValueError(f"Username {kwargs['username']} already taken!")
+
     if 'password' in kwargs:
         kwargs['password_hash'] = argon2.hash(kwargs.pop('password'))
     return update_user(user_id, **kwargs)
