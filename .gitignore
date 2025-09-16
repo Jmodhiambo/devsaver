@@ -17,3 +17,6 @@ build/
 
 # Keeping out requirements file for now
 requirements.txt
+
+# Environment variables
+.env

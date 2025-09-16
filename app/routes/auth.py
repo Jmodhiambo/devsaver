@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+""" The App's authentication routes."""
+
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -7,7 +10,7 @@ templates = Jinja2Templates(directory="app/templates")
 
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse("login.html", {"request": request, "title": "Login"})
 
 @router.post("/login")
 async def login_action(username: str = Form(...), password: str = Form(...)):

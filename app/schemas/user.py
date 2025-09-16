@@ -25,7 +25,7 @@ class UserInDBBase(UserBase):
     id: int
     created_at: datatime
     updated_at: datatime
-    last_login_at: datatime
+    last_login_at: Optional[datatime] = None
     deleted_at: Optional[datatime] = None
 
     class Config:

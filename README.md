@@ -34,13 +34,18 @@ It includes a CRUD API with proper test isolation using factories (`factory_boy`
    venv\Scripts\activate      # On Windows
    ```
 
-3. Install dependencies:
+3. Set up the .env file locally (Change the Keys)
+   ```bash
+   cp .env.example .env
+   ```
+
+4. Install dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Run the tests:
+5. Run the tests:
 
    ```bash
    pytest
