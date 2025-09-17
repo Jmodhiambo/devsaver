@@ -4,18 +4,29 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from app.services.user_services import authenticate_user
+
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request, "title": "Login"})
+    """Render the login page."""
+    msg = request.query_params.get("msg")
+    return templates.TemplateResponse("login.html", {"request": request, "title": "Login", "msg": msg})
 
 @router.post("/login")
-async def login_action(username: str = Form(...), password: str = Form(...)):
-    if username == "admin" and password == "secret":
-        response = RedirectResponse("/", status_code=303)
-        response.set_cookie("user", username)
-        return response
+async def login_action(request: Request, username: str = Form(...), password: str = Form(...)):
+    """Handle login action."""
+    user = authenticate_user(username, password)
+    if user:
+        request.session["user"] = user["username"]
+        return RedirectResponse("/dashboard", status_code=303)
     return RedirectResponse("/login", status_code=303)
+
+@router.get("/logout")
+async def logout_action(request: Request):
+    """Handle logout action."""
+    request.session.pop("user", None) # request.session.clear()
+    return RedirectResponse("/login?msg=logged_out", status_code=303)

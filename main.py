@@ -3,7 +3,7 @@
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from app.routes import home, user, auth
+from app.routes import home, user, auth, dashboard
 from app.config import SESSION_SECRET_KEY
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -19,3 +19,4 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 app.include_router(home.router)
 app.include_router(user.router, tags=["users"])
 app.include_router(auth.router, tags=["auth"])
+app.include_router(dashboard.router, tags=["dashboard"])

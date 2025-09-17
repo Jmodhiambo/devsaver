@@ -1,6 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
+  {% if msg == "logged_out" %}
+    <div class="alert">
+      You have been logged out successfully.
+    </div>
+  {% endif %}
+
+  {% if msg == "login_failed" %}
+    <div class="alert alert-error">
+      Login failed. Please check your username and password.
+    </div>
+  {% endif %}
+
+  {% if msg == "registration_success" %}
+    <div class="alert alert-success">
+      Registration successful! Please log in.
+    </div>
+  {% endif %}
+  
   <h2>Login to DevSaver</h2>
   <form method="post" action="/login">
     <input type="text" name="username" placeholder="Username" required><br><br>

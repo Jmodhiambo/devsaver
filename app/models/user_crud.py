@@ -4,6 +4,7 @@
 from app.models.engine.db import get_session
 from app.models.user import User
 from typing import Optional
+from app.schemas.user import UserInDB
 
 def create_user(username: str, email: str, password_hash: str, fullname: Optional[str] = None) -> User:
     """Create a new user in the database."""
@@ -16,13 +17,11 @@ def create_user(username: str, email: str, password_hash: str, fullname: Optiona
          
         return new_user.to_dict()
     
-def get_user_by_username(username: str) -> User | None:
+def get_user_by_username(username: str) -> UserInDB | None:
     """Retrieve a user by their username."""
     with get_session() as session:
         user = session.query(User).filter(User.username == username).first()
-        # session.refresh(user)
-        # session.expunge(user)  # detach safely
-        return user.to_dict() if user else None
+        return UserInDB.model_validate(user) if user else None # Using Pydantic model here to prevent detachment issues
     
 def get_user_by_email(email: str) -> User | None:
     """Retrieve a user by their email."""

@@ -10,16 +10,25 @@ class UserBase(BaseModel):
     username: str
     fullname: Optional[str] = None
 
+    class Config:
+        from_attributes = True
+
 
 class UserCreate(UserBase):
     """Schema for creating a new user."""
     password: str
+
+    class Config:
+        from_attributes = True
 
 class UserUpdate(BaseModel):
     """Schema for updating user information."""
     fullname: Optional[str] = None
     password: Optional[str] = None
 
+    class Config:
+        from_attributes = True
+        
 class UserInDBBase(UserBase):
     """Base schema for user data stored in the database."""
     id: int
@@ -29,11 +38,14 @@ class UserInDBBase(UserBase):
     deleted_at: Optional[datatime] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserInDB(UserInDBBase):
     """Schema for user data stored in the database, including password hash."""
     password_hash: str
+
+    class Config:
+        from_attributes = True
 
 class User(UserInDBBase):
     """Schema for user data returned to clients."""
@@ -46,28 +58,29 @@ class UserPublic(BaseModel):
     fullname: Optional[str] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserLogin(BaseModel):
     """Schema for user login."""
     username: str
     password: str
 
-class Token(BaseModel):
-    """Schema for authentication token."""
-    access_token: str
-    token_type: str = "bearer"
+    class Config:
+        from_attributes = True
 
-class TokenData(BaseModel):
-    """Schema for token data."""
-    username: Optional[str] = None
 
 class PasswordChange(BaseModel):
     """Schema for changing user password."""
     old_password: str
     new_password: str
 
+    class Config:
+        from_attributes = True
+
 class PasswordResetRequest(BaseModel):
     """Schema for requesting a password reset."""
     email: EmailStr
     redirect_url: Optional[str] = None
+
+    class Config:
+        from_attributes = True

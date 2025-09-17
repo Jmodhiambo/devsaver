@@ -38,7 +38,7 @@ class ResourceInDBBase(ResourceBase):
     updated_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Resource(ResourceInDBBase):
     """Schema for resource data returned to clients."""
@@ -59,7 +59,7 @@ class ResourcePublic(BaseModel):
     starred: bool
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ResourceList(BaseModel):
     """Schema for a list of resources."""
@@ -69,7 +69,7 @@ class ResourceList(BaseModel):
     size: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ResourceStats(BaseModel):
     """Schema for resource statistics."""
@@ -79,7 +79,7 @@ class ResourceStats(BaseModel):
     starred_resources: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ResourceFilter(BaseModel):
     """Schema for filtering resources."""
@@ -90,7 +90,7 @@ class ResourceFilter(BaseModel):
     user_id: Optional[int] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ResourceBulkUpdate(BaseModel):
     """Schema for bulk updating resources."""
@@ -99,14 +99,14 @@ class ResourceBulkUpdate(BaseModel):
     starred: Optional[bool] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ResourceBulkDelete(BaseModel):
     """Schema for bulk deleting resources."""
     resource_ids: list[int]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ResourceSearch(BaseModel):
     """Schema for searching resources."""
@@ -114,14 +114,15 @@ class ResourceSearch(BaseModel):
     user_id: Optional[int] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ResourceImport(BaseModel):
     """Schema for importing resources."""
     resources: list[ResourceCreate]
 
     class Config:
-        orm_mode = True 
+        from_attributes = True
+        
 
 class ResourceExport(BaseModel):
     """Schema for exporting resources."""
@@ -129,7 +130,7 @@ class ResourceExport(BaseModel):
     user_id: Optional[int] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ResourceCountByType(BaseModel):
     """Schema for counting resources by type."""
@@ -137,7 +138,7 @@ class ResourceCountByType(BaseModel):
     count: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ResourceCountByTag(BaseModel):
     """Schema for counting resources by tag."""
@@ -145,4 +146,4 @@ class ResourceCountByTag(BaseModel):
     count: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

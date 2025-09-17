@@ -25,8 +25,8 @@ def register_user(username: str, email: str, password: str, fullname: Optional[s
 def authenticate_user(username: str, password: str) -> Optional[dict]:
     """Authenticate a user by username and password."""
     user = get_user_by_username(username)
-    if user and argon2.verify(password, user['password_hash']):
-        return user
+    if user and argon2.verify(password, user.password_hash):
+        return user.model_dump(exclude={"password_hash"}) # Exclude password hash from returned data
     return None
 
 def get_user_profile(user_id: int) -> Optional[dict]:
