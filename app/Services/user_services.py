@@ -57,7 +57,7 @@ def remove_user(user_id: int) -> bool:
 
 def list_all_users() -> List[dict]:
     """List all users."""
-    return list_users()
+    return [user.model_dump() for user in list_users()] 
 
 def get_user_by_email_service(email: str) -> Optional[dict]:
     """Get user by email."""

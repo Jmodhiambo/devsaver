@@ -5,7 +5,7 @@ from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from app.services.user_services import authenticate_user
-
+from app.utils.auth.loggin import check_current_user
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")

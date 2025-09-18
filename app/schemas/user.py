@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Schema definitions for user-related data."""
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_serializer
 from typing import Optional
 from datetime import datetime as datatime
 
@@ -36,6 +36,11 @@ class UserInDBBase(UserBase):
     updated_at: datatime
     last_login_at: Optional[datatime] = None
     deleted_at: Optional[datatime] = None
+
+    @field_serializer("created_at", "updated_at", "last_login_at", "deleted_at")
+    def serialize_datetime(self, value: datatime | None) -> Optional[str]:
+        """Serialize datetime fields to ISO format strings."""
+        return value.isoformat() if value else None
 
     class Config:
         from_attributes = True
