@@ -23,7 +23,7 @@ async def register_page(request: Request, user: Optional[str] = Depends(check_cu
 @router.post("/register")
 async def register_action(request: Request, fullname: Optional[str] = Form(None), username: str = Form(...), email: str = Form(...), password: str = Form(...)):
     """Handle user registration."""
-    user_data = UserCreate(username=username, email=email, password=password, fullname=fullname)
+    user_data = UserCreate(fullname=fullname, username=username, email=email, password=password)
     user = register_user(user_data.username, user_data.email, user_data.password, user_data.fullname)
     if user:
         return RedirectResponse("/login?msg=registered", status_code=303)
