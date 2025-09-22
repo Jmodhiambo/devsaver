@@ -2,10 +2,9 @@
 """Handle password updates"""
 
 from app.services.user_services import update_user_profile, get_user_by_email_service
-from fastapi import Request, Depends, Form, APIRouter, HTTPException
+from fastapi import Request, Form, APIRouter
 from fastapi.templating import Jinja2Templates
-from app.utils.auth.loggin import check_current_user
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import RedirectResponse
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -16,14 +15,14 @@ async def forgot_password_page(request: Request):
     msg = request.query_params.get("msg")
     return templates.TemplateResponse("forgot_password.html", {"request": request, "title": "Forgot Password", "msg": msg})
 
-@router.post("/forgot_password")
+@router.post("/forgot-password")
 async def forgot_password_action(request: Request, email: str = Form(...)):
     """Handle forgot password action."""
     # await send_password_request(email)
     user = get_user_by_email_service(email)
     if not user:
-        raise RedirectResponse("/forgot-password?msg=email_not_found", status_code=303)    
-    return RedirectResponse("/reset-password?email={email}", status_code=303)
+        return RedirectResponse("/forgot-password?msg=email_not_found", status_code=303)    
+    return RedirectResponse(f"/reset-password?email={email}", status_code=303)
 
 @router.get("/reset-password")
 async def reset_password_page(request: Request):
@@ -38,6 +37,6 @@ async def reset_password_action(request: Request, email: str = Form(...), new_pa
     if new_password != confirm_password:
         return templates.TemplateResponse("reset_password.html", {"request": request, "title": "Reset Password", "email": email, "msg": "password_mismatch"})
     user = get_user_by_email_service(email)
-    update_user_profile(user["id"], password=new_password)
+    await update_user_profile(user.id, password=new_password)
 
     return RedirectResponse("/login?msg=password_reset", status_code=303)    

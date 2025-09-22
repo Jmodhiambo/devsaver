@@ -6,7 +6,7 @@ from app.services.user_services import register_user
 from fastapi import APIRouter, Request, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from app.utils.auth.loggin import check_current_user
+from app.utils.auth.session import check_current_user
 from typing import Optional
 
 router = APIRouter()

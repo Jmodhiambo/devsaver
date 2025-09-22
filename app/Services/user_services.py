@@ -17,6 +17,9 @@ def register_user(username: str, email: str, password: str, fullname: Optional[s
     if '@' not in email or '.' not in email:
         raise ValueError("Invalid email format")
     
+    if len(password) < 8:
+        raise ValueError("Password must be at least 8 characters long")
+    
     if get_user_by_email(email):
         raise ValueError("Email already exists")
     password_hash = argon2.hash(password)
