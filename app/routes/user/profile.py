@@ -12,6 +12,3 @@ from typing import Optional
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
-
-
-

@@ -18,11 +18,19 @@
       Registration successful! Please log in.
     </div>
   {% endif %}
-  
+
+  {% if msg == "password_reset" %}
+    <div class="alert alert-success">
+        Password reset successful! Please log in.
+    </div>
+  {% endif %}
+
   <h2>Login to DevSaver</h2>
   <form method="post" action="/login">
     <input type="text" name="username" placeholder="Username" required><br><br>
     <input type="password" name="password" placeholder="Password" required><br><br>
     <button type="submit">Login</button>
   </form>
+  <br>
+  <a href="/forgot-password">Forgot Password?</a> 
 {% endblock %}
