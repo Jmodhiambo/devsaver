@@ -20,3 +20,12 @@ requirements.txt
 
 # Environment variables
 .env
+
+# Database
+devsaver.db
+
+# VS Code folder
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
