@@ -8,19 +8,11 @@ from app.routes.user import forgot_password, user, register, profile
 from app.core.config import SESSION_SECRET_KEY
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
-from app.core.exceptions import http_exception_handler
+from fastapi.exceptions import RequestValidationError
+from app.core.exceptions import http_exception_handler, validation_exception_handler, value_error_exception_handler
 # from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="DevSaver", description="A tool to save and manage development resources.", version="1.0.0")
-
-# CORS middleware configuration
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"]
-# )
 
 # Session secret key for the SessionMiddleware
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
@@ -39,3 +31,5 @@ app.include_router(profile.router, tags=["profile"])
 
 # Register handlers globally
 app.add_exception_handler(StarletteHTTPException, http_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(ValueError, value_error_exception_handler)

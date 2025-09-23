@@ -1,0 +1,25 @@
+app/
+└── templates/
+    ├── base.html              # Global layout (header, footer, CSS, etc.)
+    ├── form.html              # Shared layout for forms (extends base.html)
+    │
+    ├── pages/                 # Page-specific templates
+    │   ├── register.html
+    │   ├── login.html
+    │   ├── reset_password.html
+    │   ├── dashboard.html
+    │   └── profile_edit.html
+    │
+    ├── partials/              # Reusable page sections
+    │   ├── navbar.html
+    │   ├── footer.html
+    │   └── flash_messages.html
+    │
+    ├── macros/                # Jinja2 macros for DRY code
+    |    └── forms.html
+    |
+    ├── errors                 # Server error handlers
+    │   ├── 403.html
+    │   ├── 404.html
+    │   ├── 500.html
+        └── generic.html

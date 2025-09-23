@@ -2,25 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>{{ title if title else "MyApp" }}</title>
+  <title>{{ title if title else "DevSaver" }}</title>
   <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
 </head>
 <body>
   <header>
-    <h1>MyApp</h1>
-    <nav>
-      <a href="/register">Register</a> |
-      <a href="/dashboard">Dashboard</a> |
-      <a href="/">Home</a> |
-      <a href="/login">Login</a> |
-      <a href="/logout">Logout</a> |
-      <a href="/profile">Profile</a> |
-      <a href="/users/">Users</a>
-    </nav>
+    <h1>DevSaver</h1>
+    {% include "partials/navbar.html" %}
   </header>
   
   <main>
     {% block content %}{% endblock %}
   </main>
+
+  {% include "partials/footer.html" %}
 </body>
 </html>

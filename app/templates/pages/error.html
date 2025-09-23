@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <style>
+        body { font-family: sans-serif; margin: 2rem; }
+        .error { color: red; font-size: 0.9rem; }
+        form { max-width: 400px; }
+        label { display: block; margin-top: 1rem; }
+        input { width: 100%; padding: 0.5rem; }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+
+    <form method="post">
+        <!-- Example for a username field -->
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username"
+               value="{{ data.get('username', '') }}">
+        {% if errors.get('username') %}
+            <div class="error">{{ errors['username'] }}</div>
+        {% endif %}
+
+        <!-- Example for a password field -->
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password"
+               value="{{ data.get('password', '') }}">
+        {% if errors.get('password') %}
+            <div class="error">{{ errors['password'] }}</div>
+        {% endif %}
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

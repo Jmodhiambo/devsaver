@@ -1,4 +1,19 @@
-{% extends "base.html" %}
+{% extends "form.html" %}
+{% from "macros/forms.html" import input_field %}
+
+{% set form_title = "Login" %}
+{% set form_action = "/login" %}
+{% set submit_label = "Login" %}
+
+<!-- input_field(name, label, type="text", value="", placeholder="", errors={}, required=false, readonly=false) -->
+
+{% block form_fields %}
+    {{ input_field("username", "Username", "text", data.username | default(""), "Username", errors, required=True) }}
+    {{ input_field("password", "Password", "password", "", "", errors, required=True) }}
+{% endblock %}
+
+
+<!-- {% extends "base.html" %}
 
 {% block content %}
   {% if msg == "logged_out" %}
@@ -33,4 +48,4 @@
   </form>
   <br>
   <a href="/forgot-password">Forgot Password?</a> 
-{% endblock %}
+{% endblock %} -->

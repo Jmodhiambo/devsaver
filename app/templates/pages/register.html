@@ -1,0 +1,30 @@
+{% extends "form.html" %}
+{% from "macros/forms.html" import input_field %}
+
+{% set form_title = "Register" %}
+{% set form_action = "/register" %}
+{% set submit_label = "Register" %}
+
+<!-- input_field(name, label, type="text", value="", placeholder="", errors={}, required=false, readonly=false) -->
+
+{% block form_fields %}
+    {{ input_field("fullname", "Full Name", "text", data.fullname | default(""), "John Doe", errors) }}
+    {{ input_field("username", "Username", "text", data.username | default(""), "johndoe", errors, required=True) }}
+    {{ input_field("email", "Email", "text", data.email | default(""), "johndoe@example.com", errors, required=True) }}
+    {{ input_field("password", "Password", "password", "", "", errors, required=True) }}
+{% endblock %}
+
+
+<!-- {% extends "base.html" %}
+
+{% block content %}
+  
+  <h2>Register an Account</h2>
+  <form method="post" action="/register">
+    <input type="text" name="fullname" placeholder="Full Name" required><br><br>
+    <input type="text" name="username" placeholder="Username" required><br><br>
+    <input type="text" name="email" placeholder="Email" required><br><br>
+    <input type="password" name="password" placeholder="Password" required><br><br>
+    <button type="submit">Register</button>
+  </form>
+{% endblock %} -->

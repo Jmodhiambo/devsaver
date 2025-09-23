@@ -2,10 +2,10 @@
 """Custom exceptions for the DevSaver application."""
 from fastapi import Request
 from starlette.exceptions import HTTPException as StarletteHTTPException # This catches and fastapi.HTTPException raises
-from fastapi.templating import Jinja2Templates
-from fastapi.responses import RedirectResponse
-
-templates = Jinja2Templates(directory="app/templates")
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import RedirectResponse, HTMLResponse
+from app.core.templates import templates
+# from pydantic import ValidationError
 
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     """Handle HTTP exceptions."""
@@ -25,3 +25,30 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
             "errors/generic.html", 
             {"request": request, "status_code":exc.status_code, "detail": exc.detail}
         )
+    
+async def validation_exception_handler(request: Request, exc: RequestValidationError) -> HTMLResponse:
+    """Handle Pydantic/FastAPI form validation errors."""
+    errors = {}
+    for err in exc.errors():
+        field = err["loc"][-1] # Get last key in location path
+        errors[field] = err["msg"]
+
+    template = getattr(request.state, "templates", "pages/error.html")
+    form_data = await request.form()
+
+    return templates.TemplateResponse(
+        template,
+        {"request": request, "title": "Validation Error", "errors": errors, "data": form_data},
+        status_code=400
+    )
+
+async def value_error_exception_handler(request: Request, exc: ValueError) -> HTMLResponse:
+    template = getattr(request.state, "templates", "pages/error.html")
+    form_data = await request.form()
+
+    return templates.TemplateResponse(
+        template, 
+        {"request": request, "title": "Value Error", "errors": {"general": str(exc)}, "data": form_data}, 
+        status_code=400
+    )
+    
