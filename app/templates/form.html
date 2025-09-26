@@ -1,13 +1,10 @@
-{% extends "base.html" %}
-
-{% block content %}
 <div class="form-container">
     <h2>{{ form_title }}</h2>
 
     {% include "partials/flash_messages.html" %}
 
     <form method="post" action="{{ form_action }}">
-        {% block form_fields %}{% endblock %}
+        {{ form_fields() | safe }}
 
         {% if errors.general %}
             <div class="error">{{ errors.general }}</div>
@@ -16,4 +13,3 @@
         <button type="submit">{{ submit_label or "Submit" }}</button>
     </form>
 </div>
-{% endblock %}

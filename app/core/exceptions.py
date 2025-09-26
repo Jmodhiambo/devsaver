@@ -5,6 +5,8 @@ from starlette.exceptions import HTTPException as StarletteHTTPException # This 
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import RedirectResponse, HTMLResponse
 from app.core.templates import templates
+from app.utils.pydantic.validation_error import validation_path, normalize_errors
+# from jinja2 import TemplateError
 # from pydantic import ValidationError
 
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
@@ -28,22 +30,24 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     
 async def validation_exception_handler(request: Request, exc: RequestValidationError) -> HTMLResponse:
     """Handle Pydantic/FastAPI form validation errors."""
-    errors = {}
-    for err in exc.errors():
-        field = err["loc"][-1] # Get last key in location path
-        errors[field] = err["msg"]
+    # errors = {}
+    # for err in exc.errors():
+    #     field = err["loc"][-1] # Get last key in location path e.g., "username", "password"
+    #     errors.setdefault(field, []).append(err["msg"])  # collect multiple errors per field
 
-    template = getattr(request.state, "templates", "pages/error.html")
+    errors = normalize_errors(exc.errors())
+    template, title = validation_path(request)
     form_data = await request.form()
 
     return templates.TemplateResponse(
         template,
-        {"request": request, "title": "Validation Error", "errors": errors, "data": form_data},
+        {"request": request, "title": title, "errors": errors, "data": form_data},
         status_code=400
     )
 
 async def value_error_exception_handler(request: Request, exc: ValueError) -> HTMLResponse:
-    template = getattr(request.state, "templates", "pages/error.html")
+    """Handle Pydantic/FastAPI value errors."""
+    template = getattr(request.state, "template", "pages/error.html")
     form_data = await request.form()
 
     return templates.TemplateResponse(
@@ -51,4 +55,14 @@ async def value_error_exception_handler(request: Request, exc: ValueError) -> HT
         {"request": request, "title": "Value Error", "errors": {"general": str(exc)}, "data": form_data}, 
         status_code=400
     )
-    
+
+# async def template_exception_handler(request: Request, exc: TemplateError) -> HTMLResponse:
+#     """Handle Jinja2 template errors."""
+#     # Log the real error for debugging
+#     print(f"Template rendering failed: {exc}")
+
+#     return templates.TemplateResponse(
+#         "errors/500.html", 
+#         {"request": request}, 
+#         status_code=400
+#     )

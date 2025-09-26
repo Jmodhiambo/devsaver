@@ -9,7 +9,8 @@ from app.core.config import SESSION_SECRET_KEY
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.exceptions import RequestValidationError
-from app.core.exceptions import http_exception_handler, validation_exception_handler, value_error_exception_handler
+import app.core.exceptions as e
+from jinja2 import TemplateError
 # from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="DevSaver", description="A tool to save and manage development resources.", version="1.0.0")
@@ -30,6 +31,10 @@ app.include_router(forgot_password.router, tags=["password"])
 app.include_router(profile.router, tags=["profile"])
 
 # Register handlers globally
-app.add_exception_handler(StarletteHTTPException, http_exception_handler)
-app.add_exception_handler(RequestValidationError, validation_exception_handler)
-app.add_exception_handler(ValueError, value_error_exception_handler)
+app.add_exception_handler(StarletteHTTPException, e.http_exception_handler)
+app.add_exception_handler(RequestValidationError, e.validation_exception_handler)
+app.add_exception_handler(ValueError, e.value_error_exception_handler)
+# app.add_exception_handler(TemplateError, e.template_exception_handler)
+
+
+# Get-ChildItem -Recurse -Filter "__pycache__" | Remove-Item -Recurse -Force

@@ -12,16 +12,16 @@ from app.models.user_crud import (
 def register_user(username: str, email: str, password: str, fullname: Optional[str] = None) -> dict:
     """Register a new user with unique username and email."""
     if get_user_by_username(username):
-        raise ValueError(f"The username '{username}' is already taken")
+        raise ValueError(f"The username '{username}' is already taken. Please choose a different username.")
     
     if '@' not in email or '.' not in email:
         raise ValueError("Invalid email format")
     
     if len(password) < 8:
-        raise ValueError("Password must be at least 8 characters long")
+        raise ValueError("Password must be at least 8 characters long.")
     
     if get_user_by_email(email):
-        raise ValueError("Email already exists")
+        raise ValueError("Email already exists! Please use a different email.")
     password_hash = argon2.hash(password)
     return create_user(username, email, password_hash, fullname)
 

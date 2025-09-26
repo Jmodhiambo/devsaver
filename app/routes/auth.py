@@ -2,6 +2,7 @@
 """ The App's authentication routes."""
 
 from fastapi import APIRouter, Request, Form, Depends
+from app.schemas.user import UserLogin
 from fastapi.responses import HTMLResponse, RedirectResponse
 from app.services.user_services import authenticate_user
 from app.utils.auth.session import check_current_user
@@ -16,17 +17,17 @@ async def login_page(request: Request, user: Optional[str] = Depends(check_curre
     if user:
         return RedirectResponse("/dashboard", status_code=303)
     msg = request.query_params.get("msg")
-    return templates.TemplateResponse("pages/login.html", {"request": request, "title": "Login", "msg": msg})
+    return templates.TemplateResponse("pages/login.html", {"request": request, "title": "Login", "msg": msg, "data": {}, "errors": {}})
 
 @router.post("/login")
-async def login_action(request: Request, username: str = Form(...), password: str = Form(...)):
+async def login_action(request: Request, form: UserLogin = Depends(UserLogin.as_form) ): #  username: str = Form(...), password: str = Form(...) No arguments means: “use the type-hinted class/function itself as the dependency."
     """Handle login action."""
     request.state.template = "pages/login.html"
 
-    user = authenticate_user(username, password)
+    user = authenticate_user(form.username, form.password)
     if not user:
         # Triggers ValueError → handled by global handler
-        raise ValueError("Invalid username or password")
+        raise ValueError("Login failed! Invalid username or password.")
 
     request.session["user"] = user["username"]
     return RedirectResponse("/dashboard", status_code=303)

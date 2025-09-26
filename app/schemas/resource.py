@@ -3,7 +3,9 @@
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
+from app.utils.pydantic.schema import as_form
 
+@as_form
 class ResourceBase(BaseModel):
     """Base schema for resource data."""
     title: str
@@ -16,10 +18,12 @@ class ResourceBase(BaseModel):
     starred: bool = False
     user_id: int
 
+@as_form
 class ResourceCreate(ResourceBase):
     """Schema for creating a new resource."""
     pass
 
+@as_form
 class ResourceUpdate(BaseModel):
     """Schema for updating resource information."""
     title: Optional[str] = None
@@ -31,6 +35,7 @@ class ResourceUpdate(BaseModel):
     read_status: Optional[bool] = None
     starred: Optional[bool] = None
 
+@as_form
 class ResourceInDBBase(ResourceBase):
     """Base schema for resource data stored in the database."""
     id: int
@@ -40,10 +45,12 @@ class ResourceInDBBase(ResourceBase):
     class Config:
         from_attributes = True
 
+@as_form
 class Resource(ResourceInDBBase):
     """Schema for resource data returned to clients."""
     pass
 
+@as_form
 class ResourcePublic(BaseModel):
     """Schema for public resource data."""
     id: int
@@ -61,6 +68,7 @@ class ResourcePublic(BaseModel):
     class Config:
         from_attributes = True
 
+@as_form
 class ResourceList(BaseModel):
     """Schema for a list of resources."""
     resources: list[ResourcePublic]
@@ -71,6 +79,7 @@ class ResourceList(BaseModel):
     class Config:
         from_attributes = True
 
+@as_form
 class ResourceStats(BaseModel):
     """Schema for resource statistics."""
     total_resources: int
@@ -81,6 +90,7 @@ class ResourceStats(BaseModel):
     class Config:
         from_attributes = True
 
+@as_form
 class ResourceFilter(BaseModel):
     """Schema for filtering resources."""
     type: Optional[str] = None
@@ -92,6 +102,7 @@ class ResourceFilter(BaseModel):
     class Config:
         from_attributes = True
 
+@as_form
 class ResourceBulkUpdate(BaseModel):
     """Schema for bulk updating resources."""
     resource_ids: list[int]
@@ -101,6 +112,7 @@ class ResourceBulkUpdate(BaseModel):
     class Config:
         from_attributes = True
 
+@as_form
 class ResourceBulkDelete(BaseModel):
     """Schema for bulk deleting resources."""
     resource_ids: list[int]
@@ -108,6 +120,7 @@ class ResourceBulkDelete(BaseModel):
     class Config:
         from_attributes = True
 
+@as_form
 class ResourceSearch(BaseModel):
     """Schema for searching resources."""
     query: str
@@ -116,6 +129,7 @@ class ResourceSearch(BaseModel):
     class Config:
         from_attributes = True
 
+@as_form
 class ResourceImport(BaseModel):
     """Schema for importing resources."""
     resources: list[ResourceCreate]
@@ -124,6 +138,7 @@ class ResourceImport(BaseModel):
         from_attributes = True
         
 
+@as_form
 class ResourceExport(BaseModel):
     """Schema for exporting resources."""
     resource_ids: Optional[list[int]] = None
@@ -132,6 +147,7 @@ class ResourceExport(BaseModel):
     class Config:
         from_attributes = True
 
+@as_form
 class ResourceCountByType(BaseModel):
     """Schema for counting resources by type."""
     type: str
@@ -140,6 +156,7 @@ class ResourceCountByType(BaseModel):
     class Config:
         from_attributes = True
 
+@as_form
 class ResourceCountByTag(BaseModel):
     """Schema for counting resources by tag."""
     tag: str

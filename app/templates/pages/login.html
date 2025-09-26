@@ -1,51 +1,71 @@
-{% extends "form.html" %}
-{% from "macros/forms.html" import input_field %}
-
-{% set form_title = "Login" %}
-{% set form_action = "/login" %}
-{% set submit_label = "Login" %}
-
-<!-- input_field(name, label, type="text", value="", placeholder="", errors={}, required=false, readonly=false) -->
-
-{% block form_fields %}
-    {{ input_field("username", "Username", "text", data.username | default(""), "Username", errors, required=True) }}
-    {{ input_field("password", "Password", "password", "", "", errors, required=True) }}
-{% endblock %}
-
-
-<!-- {% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
+<div class="form-container">  
   {% if msg == "logged_out" %}
-    <div class="alert">
+    <br><div class="alert">
       You have been logged out successfully.
     </div>
   {% endif %}
 
   {% if msg == "login_failed" %}
-    <div class="alert alert-error">
+    <br><div class="alert alert-error">
       Login failed. Please check your username and password.
     </div>
   {% endif %}
 
   {% if msg == "registered" %}
-    <div class="alert alert-success">
+    <br><div class="alert alert-success">
       Registration successful! Please log in.
     </div>
   {% endif %}
 
   {% if msg == "password_reset" %}
-    <div class="alert alert-success">
+    <br><div class="alert alert-success">
         Password reset successful! Please log in.
     </div>
   {% endif %}
 
-  <h2>Login to DevSaver</h2>
+  <h1>Login to DevSaver</h1>
+
   <form method="post" action="/login">
-    <input type="text" name="username" placeholder="Username" required><br><br>
-    <input type="password" name="password" placeholder="Password" required><br><br>
-    <button type="submit">Login</button>
+    <div>
+      <label for="username">Username</label><br>
+      <input 
+        type="text" 
+        id="username" 
+        name="username" 
+        value="{{ data.username | default('') }}" 
+        required
+      >
+      {% if errors.username %}
+        <p class="error">{{ errors.username }}</p>
+      {% endif %}
+    </div>
+    <br>
+
+    <div>
+      <label for="password">Password</label><br>
+      <input 
+        type="password" 
+        id="password" 
+        name="password" 
+        required
+      >
+      {% if errors.password %}
+        <p class="error">{{ errors.password }}</p>
+      {% endif %}
+    </div>
+    <br>
+
+    {% if errors.general %} <!-- General Errors -->
+    <p class="error">{{ errors.general }}</p><br>
+    {% endif %}
+
+    <button type="submit">Login</button><br>
   </form>
-  <br>
-  <a href="/forgot-password">Forgot Password?</a> 
-{% endblock %} -->
+  
+  <p><a href="/forgot-password">Forgot Password?</a><p>
+  <p>Don't have an account? <a href="/register">Register here.</a></p>
+</div>
+{% endblock %}

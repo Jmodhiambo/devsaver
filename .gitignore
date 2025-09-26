@@ -29,3 +29,6 @@ devsaver.db
 !.vscode/extensions.json
 !.vscode/launch.json
 !.vscode/tasks.json
+
+# Database 
+.devdbrc

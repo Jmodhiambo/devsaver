@@ -36,6 +36,6 @@ async def reset_password_action(request: Request, email: str = Form(...), new_pa
     if new_password != confirm_password:
         return templates.TemplateResponse("pages/reset_password.html", {"request": request, "title": "Reset Password", "email": email, "msg": "password_mismatch"})
     user = get_user_by_email_service(email)
-    await update_user_profile(user.id, password=new_password)
+    update_user_profile(user.id, password=new_password)
 
     return RedirectResponse("/login?msg=password_reset", status_code=303)    
