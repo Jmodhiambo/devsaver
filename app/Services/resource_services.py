@@ -3,7 +3,7 @@
 
 from app.models.resource import Resource
 from typing import List, Optional
-import app.models.resource_crud as resource_crud
+import app.crud.resource_crud as resource_crud
 
 def add_resource(
         title: str,
@@ -15,7 +15,7 @@ def add_resource(
         url: Optional[str] = None,
 ) -> Resource:
     """Add a new resource."""
-    from app.models.user_crud import get_user_by_id
+    from app.crud.user_crud import get_user_by_id
     if not get_user_by_id(user_id):
         raise ValueError("User does not exist")
     

@@ -28,7 +28,6 @@ class UserCreate(UserBase):
 class UserUpdate(BaseModel):
     """Schema for updating user information."""
     fullname: Optional[str] = None
-    password: Optional[Annotated[str, constr(min_length=8)]] = None
 
     class Config:
         from_attributes = True
@@ -96,7 +95,8 @@ class PasswordChange(BaseModel):
 class PasswordResetRequest(BaseModel):
     """Schema for requesting a password reset."""
     email: EmailStr
-    redirect_url: Optional[str] = None
+    new_password: Annotated[str, constr(min_length=8)]
+    confirm_password: Annotated[str, constr(min_length=8)]
 
     class Config:
         from_attributes = True

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class ="form-container">
+    <br>
+
+    {% if msg %}
+        <p class="alert alert-error">{{ msg }}</p>
+    {% endif %}
+
+    <h1>Update User Info</h1>
+    <form method="post" action="/profile">
+        <div>
+            <label for="fullname">Full Name</label><br>
+            <input 
+                type="text" 
+                id="fullname" 
+                name="fullname" 
+                value="{{ data.fullname if data.fullname else '' }}" 
+                placeholder="John Doe"
+            >
+            {% if errors.fullname %}
+                <p class="error">{{ errors.fullname }}</p>
+            {% endif %}
+        </div>
+        <br>        
+        <div>
+            <label for="username">Username</label><br>
+            <input 
+                type="text" 
+                id="username" 
+                name="username" 
+                value="{{ data.username }}" 
+                placeholder="johndoe" 
+                disabled
+        </div>
+        <br>
+        <div>
+            <label for="email">Email</label><br>
+            <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                value="{{ data.email }}" 
+                placeholder="johndoe"
+                disabled
+        </div>
+        <br>
+        <button type="submit">Update</button>
+    </form>
+
+
+
+
+</div>
+{% endblock %}

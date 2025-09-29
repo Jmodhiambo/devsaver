@@ -11,6 +11,14 @@ def validation_path(request) -> Tuple[str, str]:
         return "pages/login.html", "Login Error"
     elif request.url.path.startswith("/register"):
         return "pages/register.html", "Registration Error"
+    elif request.url.path.startswith("/forgot-password"):
+        return "pages/forgot_password.html", "Password Reset Error"
+    elif request.url.path.startswith("/reset-password"):
+        return "pages/reset_password.html", "Password Reset Error"
+    elif request.url.path.startswith("/profile/change-password"):
+        return "pages/profile.html", "Password Change Error"
+    elif request.url.path.startswith("/profile"):
+        return "pages/profile.html", "Profile Update Error"
     else:
         return "pages/error.html", "Validation Error"
     

@@ -63,25 +63,3 @@ def as_form(cls):
     # attach the function to the class (no classmethod wrapper — the closure captures `cls`)
     setattr(cls, "as_form", _as_form)
     return cls
-
-
-# from fastapi import Form
-# from pydantic import BaseModel
-
-# def as_form(cls):
-#     """
-#     Adds an `as_form` classmethod to Pydantic models so they can accept form-data.
-#     """
-#     new_params = []
-#     for field_name, model_field in cls.__fields__.items():
-#         default = Form(...) if model_field.is_required else Form(model_field.default)
-#         new_params[field_name] = default
-
-#     async def _as_form(**data):
-#         """
-#         Return an instance of cls from form data.
-#         """
-#         return cls(**data)
-
-#     setattr(cls, "as_form", classmethod(lambda _cls: lambda **data: _cls(**data)))
-#     return cls

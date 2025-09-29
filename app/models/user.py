@@ -15,7 +15,7 @@ class User(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True, index=True)
     fullname: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     username: Mapped[str] = mapped_column(String, unique=True, nullable=False, index=True)
-    email: Mapped[str] = mapped_column(String, unique=True, nullable=False, index=True)
+    email: Mapped[str] = mapped_column(String(255, collation="NOCASE"), unique=True, nullable=False, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc), nullable=False, index=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc), nullable=False)
     deleted_at: Mapped[datetime] = mapped_column(DateTime, nullable=True)

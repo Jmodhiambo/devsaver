@@ -4,9 +4,9 @@
 
 from passlib.hash import argon2
 from typing import List, Optional
-from app.models.user_crud import (
+from app.crud.user_crud import (
     create_user, get_user_by_username, get_user_by_email,
-    get_user_by_id, update_user, delete_user, list_users
+    get_user_by_id, update_user, delete_user, list_users, update_password
 )
 
 def register_user(username: str, email: str, password: str, fullname: Optional[str] = None) -> dict:
@@ -50,9 +50,13 @@ def update_user_profile(user_id: int, **kwargs) -> Optional[dict]:
         if existing_user and existing_user['id'] != user_id:
             raise ValueError(f"Username {kwargs['username']} already taken!")
 
-    if 'password' in kwargs:
-        kwargs['password_hash'] = argon2.hash(kwargs.pop('password'))
     return update_user(user_id, **kwargs)
+
+def update_user_password(user_id: int, password: str) -> Optional[dict]:
+    """Update user password."""
+    if len(password) < 8:
+        raise ValueError("Password must be at least 8 characters long!")
+    return update_password(user_id, argon2.hash(password))
 
 def remove_user(user_id: int) -> bool:
     """Remove a user by user ID."""

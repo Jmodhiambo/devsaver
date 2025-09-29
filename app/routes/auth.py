@@ -29,11 +29,13 @@ async def login_action(request: Request, form: UserLogin = Depends(UserLogin.as_
         # Triggers ValueError → handled by global handler
         raise ValueError("Login failed! Invalid username or password.")
 
-    request.session["user"] = user["username"]
+    request.session["user"] = user["id"]
     return RedirectResponse("/dashboard", status_code=303)
 
 @router.get("/logout")
-async def logout_action(request: Request):
+async def logout_action(request: Request, user: Optional[str] = Depends(check_current_user)) -> RedirectResponse:
     """Handle logout action."""
+    if not user:
+        return RedirectResponse("/login", status_code=303)
     request.session.pop("user", None) # request.session.clear()
     return RedirectResponse("/login?msg=logged_out", status_code=303)

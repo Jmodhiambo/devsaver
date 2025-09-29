@@ -3,8 +3,8 @@
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from app.routes import home, auth, dashboard
-from app.routes.user import forgot_password, user, register, profile
+from app.routes import home, auth, dashboard, admin
+from app.routes.user import reset_password, user, register, profile
 from app.core.config import SESSION_SECRET_KEY
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -27,8 +27,9 @@ app.include_router(user.router, tags=["users"])
 app.include_router(auth.router, tags=["auth"])
 app.include_router(dashboard.router, tags=["dashboard"])
 app.include_router(register.router, tags=["register"])
-app.include_router(forgot_password.router, tags=["password"])
+app.include_router(reset_password.router, tags=["password"])
 app.include_router(profile.router, tags=["profile"])
+app.include_router(admin.router, tags=["admin"])
 
 # Register handlers globally
 app.add_exception_handler(StarletteHTTPException, e.http_exception_handler)

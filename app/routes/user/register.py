@@ -22,11 +22,11 @@ async def register_page(request: Request, user: Optional[str] = Depends(check_cu
 @router.post("/register")
 async def register_action(request: Request, form: UserCreate = Depends(UserCreate.as_form)): # fullname: Optional[str] = Form(None), username: str = Form(...), email: str = Form(...), password: str = Form(...)
     """Handle user registration with reusable error handling."""
-    request.state.template = "pages/register.html"  # Tell the exception handler to use this template
+    request.state.template = "pages/register.html"  # Tell the ValueError exception handler to use this template
 
-    user = register_user(form.username, form.email, form.password, form.fullname)
+    user = register_user(form.username, form.email.lower(), form.password, form.fullname)
     if user:
         return RedirectResponse("/login?msg=registered", status_code=303)
     
     # Triggers ValueError → handled by global handler
-    raise ValueError("Registration failed. Please try again.")
+    raise ValueError("Registration failed. Please try again!")

@@ -4,7 +4,7 @@
 from app.models.engine.db import get_session
 from app.models.user import User
 from typing import Optional
-from app.schemas.user import UserInDB, User as UserSchema
+from app.schemas.user import UserInDB, PasswordResetRequest, User as UserSchema
 
 def create_user(username: str, email: str, password_hash: str, fullname: Optional[str] = None) -> UserSchema:
     """Create a new user in the database."""
@@ -46,6 +46,17 @@ def update_user(user_id: int, **kwargs) -> UserSchema | None:
             session.commit()
             session.refresh(user) # reloads from db
             # session.expunge(user)  # detach safely
+            return UserSchema.model_validate(user)
+        return None
+    
+def update_password(user_id: int, password_hash: str) -> UserSchema | None:
+    """Update an existing user's password."""
+    with get_session() as session:
+        user = session.query(User).filter(User.id == user_id).first()
+        if user:
+            user.password_hash = password_hash
+            session.add(user)
+            session.commit()
             return UserSchema.model_validate(user)
         return None
     
