@@ -87,6 +87,7 @@ class PasswordChange(BaseModel):
     """Schema for changing user password."""
     old_password: Annotated[str, constr(min_length=8)]
     new_password: Annotated[str, constr(min_length=8)]
+    confirm_password: Annotated[str, constr(min_length=8)]
 
     class Config:
         from_attributes = True

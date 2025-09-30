@@ -3,8 +3,8 @@
 
 from fastapi import APIRouter, HTTPException, Request, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
-from app.schemas.user import UserUpdate
-from app.services.user_services import update_user_profile, get_user_by_id
+from app.schemas.user import UserUpdate, PasswordChange
+from app.services.user_services import update_user_profile, get_user_by_id, authenticate_user, get_user_profile, update_user_password
 from app.utils.auth.session import check_current_user
 from typing import Optional
 from app.core.templates import templates
@@ -40,3 +40,40 @@ async def update_profile(request: Request, form: UserUpdate = Depends(UserUpdate
         raise ValueError("Profile update failed. Please try again!")
 
     return RedirectResponse("/profile?msg=updated", status_code=303)
+
+@router.get("/profile/change-password", response_class=HTMLResponse)
+async def change_password_get(request: Request, session_user: Optional[str] = Depends(check_current_user)) -> HTMLResponse:
+    """Render the change password page."""
+    if not session_user:
+        raise HTTPException(status_code=401, detail="Unauthorized Access!")
+    
+    msg = request.query_params.get("msg")
+    if msg == "password_changed":
+        msg = "Password changed successfully!"
+
+    return templates.TemplateResponse("pages/change_password.html", {"request": request, "title": "Change Password", "errors": {}, "data": {}, "msg": msg})
+
+@router.post("/profile/change-password", response_class=HTMLResponse)
+async def change_password_post(
+    request: Request, form: PasswordChange = Depends(PasswordChange.as_form), session_user: Optional[str] = Depends(check_current_user)
+) -> HTMLResponse:
+    """Handle password change with reusable error handling."""
+    if not session_user:
+        raise HTTPException(status_code=401, detail="Unauthorized Access!")
+    
+    request.state.template = "pages/change_password.html"
+    
+    if form.new_password != form.confirm_password:
+        raise ValueError("New password and confirm password do not match.")
+    
+    user_id = request.session.get("user")
+    user = get_user_profile(user_id)
+
+    if not user or not authenticate_user(user.username, form.old_password):
+        raise ValueError("Old password is incorrect.")
+
+    success = update_user_password(user_id, password=form.new_password)
+    if not success:
+        raise ValueError("Password change failed. Please ensure your old password is correct.")
+
+    return RedirectResponse("/profile/change-password?msg=password_changed", status_code=303)

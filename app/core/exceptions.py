@@ -13,7 +13,7 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     """Handle HTTP exceptions."""
     # Redirect to login if 401 status code
     if exc.status_code == 401:
-        return RedirectResponse("/login", status_code=303)
+        return RedirectResponse("/login?msg=unauthorized", status_code=303)
     
     # Render templates for other status codes or errors
     template_name = f"errors/{exc.status_code}.html"
@@ -30,11 +30,6 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     
 async def validation_exception_handler(request: Request, exc: RequestValidationError) -> HTMLResponse:
     """Handle Pydantic/FastAPI form validation errors."""
-    # errors = {}
-    # for err in exc.errors():
-    #     field = err["loc"][-1] # Get last key in location path e.g., "username", "password"
-    #     errors.setdefault(field, []).append(err["msg"])  # collect multiple errors per field
-
     errors = normalize_errors(exc.errors())
     template, title = validation_path(request)
     form_data = await request.form()

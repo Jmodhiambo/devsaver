@@ -8,8 +8,8 @@
         <p class="alert alert-error">{{ msg }}</p>
     {% endif %}
 
-    <h1>Update User Info</h1>
-    <form method="post" action="/profile">
+    <h1>Edit User Info</h1>
+    <form method="post" action="/admin/edit-user/{{ data.id }}">
         <div>
             <label for="fullname">Full Name</label><br>
             <input 
