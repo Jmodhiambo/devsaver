@@ -58,8 +58,9 @@ def main():
     add_res_parser.add_argument("--tags", required=False, default="", help="Comma-separated tags")
     add_res_parser.add_argument("--type", required=True, help="Type of resource (e.g., article, video)")
     add_res_parser.add_argument("--source", required=True, help="Source/URL")
-    add_res_parser.add_argument("--url", required=False, help="Resource URL")
+    add_res_parser.add_argument("--url", required=True, help="Resource URL")
     add_res_parser.add_argument("--user-id", required=True, type=int, help="User ID")
+    add_res_parser.add_argument("--original-filename", required=False, help="Original filename if uploaded")
 
     list_res_parser = subparsers.add_parser("list-resources", help="List resources for a user")
     list_res_parser.add_argument("--user-id", required=True, type=int, help="User ID")
@@ -120,6 +121,7 @@ def main():
                 source=args.source,
                 url=args.url,
                 user_id=args.user_id,
+                original_filename=args.original_filename,
             )
             print(f"✅ Resource added: {res}")
 

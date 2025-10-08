@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""CRUD operations for DevSaver."""
+"""Resource CRUD operations for DevSaver."""
 
 from app.models.engine.db import get_session
 from app.models.resource import Resource
-from typing import List, Optional
+from typing import Optional
+from app.schemas.resource import Resource as ResourceSchema
  
 def create_resource(
         title: str,
@@ -12,8 +13,9 @@ def create_resource(
         user_id: int,
         description: Optional[str] = None,
         tags: Optional[str] = None,
-        url: Optional[str] = None,
-) -> Resource:
+        url: str = None,
+        original_filename: Optional[str] = None,
+) -> ResourceSchema:
     """Create a new resource in the database."""
     with get_session() as session:
         new_resource = Resource(            
@@ -23,21 +25,22 @@ def create_resource(
             type=type,
             source=source,
             url=url,
+            original_filename=original_filename,
             user_id=user_id,
         )
         session.add(new_resource)
-        session.flush() # forces INSERT so id is assigned
+        session.commit() # forces INSERT so id is assigned
         session.refresh(new_resource) # reloads from db
 
-        return new_resource.to_dict()
+        return ResourceSchema.model_validate(new_resource)
     
-def get_resources_by_user(user_id: int) -> List[Resource]:
+def get_resources_by_user(user_id: int) -> list[ResourceSchema]:
     """Retrieve all resources for a given user."""
     with get_session() as session:
         resources = session.query(Resource).filter(Resource.user_id == user_id).all()
-        return [res.to_dict() for res in resources]
+        return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
-def update_resource(resource_id: int, **kwargs) -> Resource | None:
+def update_resource(resource_id: int, **kwargs) -> Optional[ResourceSchema]:
     """Update an existing resource."""
     with get_session() as session:
         resource = session.query(Resource).filter(Resource.id == resource_id).first()
@@ -45,9 +48,9 @@ def update_resource(resource_id: int, **kwargs) -> Resource | None:
             for key, value in kwargs.items():
                 setattr(resource, key, value)
             session.add(resource)
-            session.flush()           # forces INSERT so id is assigned
+            session.commit() 
             session.refresh(resource) # reloads from db
-            return resource.to_dict()
+            return ResourceSchema.model_validate(resource)
         return None
     
 def delete_resource(resource_id: int) -> bool:
@@ -59,72 +62,72 @@ def delete_resource(resource_id: int) -> bool:
             return True
         return False
     
-def get_resource_by_id(resource_id: int) -> Resource | None:
+def get_resource_by_id(resource_id: int) -> Optional[ResourceSchema]:
     """Retrieve a resource by its ID."""
     with get_session() as session:
         resource = session.query(Resource).filter(Resource.id == resource_id).first()
-        return resource.to_dict() if resource else None
+        return ResourceSchema.model_validate(resource) if resource else None
     
-def get_resources_by_tag(user_id: int, tag: str) -> List[Resource]:
+def get_resources_by_tag(user_id: int, tag: str) -> list[ResourceSchema]:
     """Retrieve resources for a user filtered by a specific tag."""
     with get_session() as session:
         resources = session.query(Resource).filter(Resource.user_id == user_id, Resource.tags.contains(tag)).all()
-        return [res.to_dict() for res in resources]
+        return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
-def get_resources_by_type(user_id: int, resource_type: str) -> List[Resource]:
+def get_resources_by_type(user_id: int, resource_type: str) -> list[ResourceSchema]:
     """Retrieve resources for a user filtered by a specific type."""
     with get_session() as session:
         resources = session.query(Resource).filter(Resource.user_id == user_id, Resource.type == resource_type).all()
-        return [res.to_dict() for res in resources]
+        return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
-def get_starred_resources(user_id: int) -> List[Resource]:
+def get_starred_resources(user_id: int) -> list[ResourceSchema]:
     """Retrieve all starred resources for a given user."""
     with get_session() as session:
         resources = session.query(Resource).filter(Resource.user_id == user_id, Resource.starred == True).all()
-        return [res.to_dict() for res in resources]
+        return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
-def get_unread_resources(user_id: int) -> List[Resource]:
+def get_unread_resources(user_id: int) -> list[ResourceSchema]:
     """Retrieve all unread resources for a given user."""
     with get_session() as session:
         resources = session.query(Resource).filter(Resource.user_id == user_id, Resource.read_status == False).all()
-        return [res.to_dict() for res in resources]
+        return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
-def mark_resource_as_read(resource_id: int) -> Resource | None:
+def mark_resource_as_read(resource_id: int) -> Optional[ResourceSchema]:
     """Mark a resource as read."""
     with get_session() as session:
         resource = session.query(Resource).filter(Resource.id == resource_id).first()
         if resource:
             resource.read_status = True
             session.add(resource)
-            return resource.to_dict()
+            return ResourceSchema.model_validate(resource)
         return None
     
-def toggle_star_resource(resource_id: int) -> Resource | None:
+def toggle_star_resource(resource_id: int) -> Optional[ResourceSchema]:
     """Toggle the starred status of a resource."""
     with get_session() as session:
         resource = session.query(Resource).filter(Resource.id == resource_id).first()
         if resource:
             resource.starred = not resource.starred
             session.add(resource)
-            return resource.to_dict()
+            return ResourceSchema.model_validate(resource)
         return None
     
-def search_resources(user_id: int, query: str) -> List[Resource]:
+def search_resources(user_id: int, query: str) -> list[ResourceSchema]:
     """Search resources for a user by title or description."""
     with get_session() as session:
         resources = session.query(Resource).filter(
             Resource.user_id == user_id,
             (Resource.title.contains(query) | Resource.description.contains(query))
         ).all()
-        return [res.to_dict() for res in resources]
+        return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
-def get_recent_resources(user_id: int, limit: int = 10) -> List[Resource]:
+def get_recent_resources(user_id: int, limit: int = 10) -> list[ResourceSchema]:
     """Retrieve the most recent resources for a given user."""
     with get_session() as session:
         resources = session.query(Resource).filter(Resource.user_id == user_id).order_by(Resource.created_at.desc()).limit(limit).all()
-        return [res.to_dict() for res in resources]
+        return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
-def get_resources_by_date_range(user_id: int, start_date: str, end_date: str) -> List[Resource]:
+def get_resources_by_date_range(user_id: int, start_date: str, end_date: str) -> list[ResourceSchema]:
     """Retrieve resources for a user within a specific date range."""
     with get_session() as session:
         resources = session.query(Resource).filter(
@@ -132,19 +135,19 @@ def get_resources_by_date_range(user_id: int, start_date: str, end_date: str) ->
             Resource.created_at >= start_date,
             Resource.created_at <= end_date
         ).all()
-        return [res.to_dict() for res in resources]
+        return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
-def get_resources_by_source(user_id: int, source: str) -> List[Resource]:   
+def get_resources_by_source(user_id: int, source: str) -> list[ResourceSchema]:   
     """Retrieve resources for a user filtered by a specific source."""
     with get_session() as session:
         resources = session.query(Resource).filter(Resource.user_id == user_id, Resource.source == source).all()
-        return [res.to_dict() for res in resources]
+        return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
-def get_all_resources() -> List[Resource]:
+def get_all_resources() -> list[ResourceSchema]:
     """Retrieve all resources in the database."""
     with get_session() as session:
         resources = session.query(Resource).all()
-        return [res.to_dict() for res in resources]
+        return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
 def delete_resources_by_user(user_id: int) -> int:
     """Delete all resources for a given user. Returns the number of deleted resources."""
@@ -167,7 +170,7 @@ def count_unread_resources_by_user(user_id: int) -> int:
     with get_session() as session:
         return session.query(Resource).filter(Resource.user_id == user_id, Resource.read_status == False).count()
     
-def get_distinct_tags_by_user(user_id: int) -> List[str]:
+def get_distinct_tags_by_user(user_id: int) -> list[str]:
     """Retrieve a list of distinct tags used by a given user."""
     with get_session() as session:
         tags = session.query(Resource.tags).filter(Resource.user_id == user_id).all()
@@ -178,19 +181,19 @@ def get_distinct_tags_by_user(user_id: int) -> List[str]:
                     distinct_tags.add(tag.strip())
         return list(distinct_tags)
     
-def get_distinct_types_by_user(user_id: int) -> List[str]:
+def get_distinct_types_by_user(user_id: int) -> list[str]:
     """Retrieve a list of distinct resource types used by a given user."""
     with get_session() as session:
         types = session.query(Resource.type).filter(Resource.user_id == user_id).distinct().all()
         return [type_tuple[0] for type_tuple in types if type_tuple[0]]
     
-def get_distinct_sources_by_user(user_id: int) -> List[str]:
+def get_distinct_sources_by_user(user_id: int) -> list[str]:
     """Retrieve a list of distinct sources used by a given user."""
     with get_session() as session:
         sources = session.query(Resource.source).filter(Resource.user_id == user_id).distinct().all()
         return [source_tuple[0] for source_tuple in sources if source_tuple[0]] 
     
-def bulk_update_resources(resource_ids: List[int], **kwargs) -> int:
+def bulk_update_resources(resource_ids: list[int], **kwargs) -> int:
     """Bulk update multiple resources. Returns the number of updated resources."""
     with get_session() as session:
         resources = session.query(Resource).filter(Resource.id.in_(resource_ids)).all()
@@ -200,17 +203,17 @@ def bulk_update_resources(resource_ids: List[int], **kwargs) -> int:
             session.add(resource)
         return len(resources)
     
-def bulk_delete_resources(resource_ids: List[int]) -> int:
+def bulk_delete_resources(resource_ids: list[int]) -> int:
     """Bulk delete multiple resources. Returns the number of deleted resources."""
     with get_session() as session:
         deleted_count = session.query(Resource).filter(Resource.id.in_(resource_ids)).delete(synchronize_session='fetch')
         return deleted_count
     
-def get_resources_paginated(user_id: int, page: int = 1, page_size: int = 10) -> List[Resource]:
+def get_resources_paginated(user_id: int, page: int = 1, page_size: int = 10) -> list[ResourceSchema]:
     """Retrieve resources for a user with pagination."""
     with get_session() as session:
         resources = session.query(Resource).filter(Resource.user_id == user_id).offset((page - 1) * page_size).limit(page_size).all()
-        return [res.to_dict() for res in resources]
+        return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
 def count_resources_by_tag(user_id: int, tag: str) -> int:
     """Count the number of resources for a user filtered by a specific tag."""
@@ -227,7 +230,7 @@ def count_resources_by_source(user_id: int, source: str) -> int:
     with get_session() as session:
         return session.query(Resource).filter(Resource.user_id == user_id, Resource.source == source).count()
     
-def get_most_common_tags(user_id: int, limit: int = 10) -> List[str]:
+def get_most_common_tags(user_id: int, limit: int = 10) -> list[str]:
     """Retrieve the most common tags used by a given user."""
     with get_session() as session:
         tags = session.query(Resource.tags).filter(Resource.user_id == user_id).all()
@@ -242,7 +245,7 @@ def get_most_common_tags(user_id: int, limit: int = 10) -> List[str]:
         return [tag for tag, count in sorted_tags[:limit]]
     
 
-def get_most_common_types(user_id: int, limit: int = 10) -> List[str]:
+def get_most_common_types(user_id: int, limit: int = 10) -> list[str]:
     """Retrieve the most common resource types used by a given user."""
     with get_session() as session:
         types = session.query(Resource.type).filter(Resource.user_id == user_id).all()

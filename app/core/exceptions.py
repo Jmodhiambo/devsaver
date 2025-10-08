@@ -47,7 +47,7 @@ async def value_error_exception_handler(request: Request, exc: ValueError) -> HT
 
     return templates.TemplateResponse(
         template, 
-        {"request": request, "title": "Value Error", "errors": {"general": str(exc)}, "data": form_data}, 
+        {"request": request, "title": "Validation Error", "errors": {"general": str(exc)}, "data": form_data}, 
         status_code=400
     )
 

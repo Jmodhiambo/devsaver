@@ -12,28 +12,22 @@ class ResourceBase(BaseModel):
     description: Optional[str] = None
     tags: Optional[str] = None
     type: str
-    url: Optional[str] = None
+    url: str
+    original_filename: Optional[str] = None
     source: str
     read_status: bool = False
     starred: bool = False
     user_id: int
 
 @as_form
-class ResourceCreate(ResourceBase):
-    """Schema for creating a new resource."""
-    pass
-
-@as_form
-class ResourceUpdate(BaseModel):
-    """Schema for updating resource information."""
-    title: Optional[str] = None
+class ResourceCreate(BaseModel):
+    """Schema for creating a resource."""
+    title: str
     description: Optional[str] = None
     tags: Optional[str] = None
-    type: Optional[str] = None
-    url: Optional[str] = None
-    source: Optional[str] = None
-    read_status: Optional[bool] = None
-    starred: Optional[bool] = None
+    type: str
+    source: str
+    external_url: Optional[str] = None  # URL is optional if file is provided
 
 @as_form
 class ResourceInDBBase(ResourceBase):
@@ -51,14 +45,32 @@ class Resource(ResourceInDBBase):
     pass
 
 @as_form
+class ResourceUpdate(BaseModel):
+    """Schema for updating resource information."""
+    title: Optional[str] = None
+    description: Optional[str] = None
+    tags: Optional[str] = None
+    type: Optional[str] = None
+    url: Optional[str] = None
+    original_filename: Optional[str] = None
+    source: Optional[str] = None
+    read_status: Optional[bool] = None
+    starred: Optional[bool] = None
+
+    class Config:
+        from_attributes = True
+
+@as_form
 class ResourcePublic(BaseModel):
     """Schema for public resource data."""
     id: int
     title: str
+    user_id: int
     description: Optional[str] = None
     tags: Optional[str] = None
     type: str
     url: Optional[str] = None
+    original_filename: Optional[str] = None
     source: str
     created_at: datetime
     updated_at: datetime

@@ -5,6 +5,7 @@ from fastapi import APIRouter, Request, Depends, HTTPException
 from app.utils.auth.session import check_current_user
 from typing import Optional
 from app.core.templates import templates
+from app.services.resource_services import list_resources_by_user
 
 
 router = APIRouter()
@@ -14,4 +15,9 @@ async def dashboard(request: Request, user: Optional[str] = Depends(check_curren
     """Render the home page."""
     if not user:
         raise HTTPException(status_code=401, detail="Unauthorized Access!")
-    return templates.TemplateResponse("pages/dashboard.html", {"request": request, "title": "Welcome to the DevSaver App"})
+    
+    msg = request.query_params.get("msg")
+    
+    user_id = request.session.get("user")
+    resources = list_resources_by_user(user_id)
+    return templates.TemplateResponse("pages/dashboard.html", {"request": request, "title": "Welcome to the DevSaver App", "resources": resources, "msg": msg})

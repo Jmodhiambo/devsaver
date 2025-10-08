@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container">
+  <h2>Update Resource</h2>
+
+  <form method="post" enctype="multipart/form-data" action="/resources/edit-resource/{{ resource.id }}">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" value="{{ resource.title }}" required>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" value="{{ resource.description }}"></textarea>
+
+    <label for="tags">Tags (comma separated):</label>
+    <input type="text" id="tags" name="tags" value="{{ resource.tags }}">
+
+    <label for="type">Type:</label><br>
+    <select id="type" name="type" required>
+      <option value="{{ resource.type }}" selected>{{ resource.type }}</option> <!-- Selected the current type -->
+      <option value="video">Video</option>
+      <option value="image">Image</option>
+      <option value="document">Document</option>
+      <option value="link">Link</option>
+    </select>
+
+    <label for="source">Source:</label>
+    <input type="text" id="source" name="source" value="{{ resource.source }}">
+
+    {% if resource.original_filename %}
+        <label>Update Current File Name:</label>
+        <input type="text" name="original_filename" value="{{ resource.original_filename }}" required>
+    {% else %}
+        <label for="url">Update External Resource URL:</label>
+        <input type="url" id="url" name="url" value="{{ resource.url }}" required>
+    {% endif %}
+
+    {% if errors.general %}
+      <p class="error">{{ errors.general }}</p><br>
+    {% endif %}
+
+    <button type="submit">Update Resource</button>
+  </form>
+</div>
+{% endblock %}

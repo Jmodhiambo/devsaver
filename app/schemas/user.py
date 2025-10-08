@@ -58,9 +58,19 @@ class UserInDB(UserInDBBase):
         from_attributes = True
 
 @as_form
-class User(UserInDBBase):
+class User(BaseModel):
     """Schema for user data returned to clients."""
-    pass
+    id: int
+    username: str
+    email: EmailStr
+    fullname: Optional[str]
+    created_at: datatime
+    updated_at: datatime
+    last_login_at: Optional[datatime] = None
+    deleted_at: Optional[datatime] = None
+    
+    class Config:
+        from_attributes = True
 
 @as_form
 class UserPublic(BaseModel):

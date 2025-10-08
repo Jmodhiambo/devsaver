@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""CRUD operations for DevSaver."""
+"""User CRUD operations for DevSaver."""
 
 from app.models.engine.db import get_session
 from app.models.user import User
 from typing import Optional
-from app.schemas.user import UserInDB, PasswordResetRequest, User as UserSchema
+from app.schemas.user import UserInDB, User as UserSchema
 
 def create_user(username: str, email: str, password_hash: str, fullname: Optional[str] = None) -> UserSchema:
     """Create a new user in the database."""
@@ -34,13 +34,7 @@ def get_user_by_id(user_id: int) -> UserSchema | None:
     with get_session() as session:
         user = session.query(User).filter(User.id == user_id).first()
         return UserSchema.model_validate(user) if user else None
-    
-# def get_user_with_pwd(user_id: int) -> UserInDB | None:
-#     """Retrieve a user by their ID. The user data included password hash for validation purposes."""
-#     with get_session() as session:
-#         user = session.query(User).filter(User.id == user_id).first()
-#         return UserInDB.model_validate(user) if user else None
-    
+
 def update_user(user_id: int, **kwargs) -> UserSchema | None:
     """Update an existing user."""
     with get_session() as session:

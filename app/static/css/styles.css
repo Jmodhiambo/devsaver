@@ -24,7 +24,7 @@ main {
   flex: 1;
   display: flex;
   justify-content: left;  /* center horizontally */
-  align-items: center;      /* center vertically */
+  align-items: top;      /* center vertically */
   width : 100%;
 }
 
@@ -97,6 +97,12 @@ button:hover {
   width: auto;
   align-self: center;
   padding: 0.6rem 1.2rem;
+}
+
+label {
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: left;
 }
 
 .alert {

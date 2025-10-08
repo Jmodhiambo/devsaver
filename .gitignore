@@ -23,6 +23,7 @@ requirements.txt
 
 # Database
 devsaver.db
+app/uploads/
 
 # VS Code folder
 .vscode/*

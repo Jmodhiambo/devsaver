@@ -21,6 +21,10 @@ def validation_path(request) -> Tuple[str, str]:
         return "pages/profile.html", "Profile Update Error"
     elif request.url.path.startswith("/admin/edit-user"):
         return "pages/edit_user.html", "Edit User Error"
+    elif request.url.path.startswith("/resources/upload"):
+        return "pages/upload_resource.html", "Upload Resource Error"
+    elif request.url.path.startswith("/resources/edit-resource"):
+        return "pages/edit_resource.html", "Edit Resource Error"
     else:
         return "pages/error.html", "Validation Error"
     

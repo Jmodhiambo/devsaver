@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from app.routes import home, auth, dashboard, admin
 from app.routes.user import reset_password, user, register, profile
+from app.routes.resource import rss, resources
 from app.core.config import SESSION_SECRET_KEY
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -21,7 +22,10 @@ app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
 # Mount static files
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-# Include routers
+# Static uploads directory
+app.mount("/uploads", StaticFiles(directory="app/uploads"), name="uploads")
+
+# Include User routers
 app.include_router(home.router, tags=["home"])
 app.include_router(user.router, tags=["users"])
 app.include_router(auth.router, tags=["auth"])
@@ -30,6 +34,10 @@ app.include_router(register.router, tags=["register"])
 app.include_router(reset_password.router, tags=["password"])
 app.include_router(profile.router, tags=["profile"])
 app.include_router(admin.router, tags=["admin"])
+
+# Include Resource routers
+app.include_router(rss.router, tags=["rss"])
+app.include_router(resources.router, tags=["resources"])
 
 # Register handlers globally
 app.add_exception_handler(StarletteHTTPException, e.http_exception_handler)

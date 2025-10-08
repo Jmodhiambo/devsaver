@@ -26,13 +26,17 @@ async def profile(request: Request, session_user: Optional[str] = Depends(check_
     return templates.TemplateResponse("pages/profile.html", {"request": request, "title": "Profile Update", "errors": {}, "data": user, "msg": msg})
 
 @router.post("/profile/")
-async def update_profile(request: Request, form: UserUpdate = Depends(UserUpdate.as_form)) -> RedirectResponse:
+async def update_profile(request: Request, form: UserUpdate = Depends(UserUpdate.as_form), session_user: Optional[str] = Depends(check_current_user)) -> RedirectResponse:
     """Handle user profile update. Just fullname update for now"""
+    if not session_user:
+        raise HTTPException(status_code=401, detail="Unauthorized Access!")
+    
     request.state.template = "pages/profile.html"
 
     user_id = request.session.get("user")
+
     if form.fullname == "":
-        form.fullname = None
+        form.fullname = None  
 
     success = update_user_profile(user_id, fullname=form.fullname)
     if not success:
