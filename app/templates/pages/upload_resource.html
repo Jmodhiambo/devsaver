@@ -16,10 +16,11 @@
 
     <label for="type">Type:</label><br>
     <select id="type" name="type" required>
-      <option value="video">Video</option>
-      <option value="image">Image</option>
-      <option value="document">Document</option>
-      <option value="link">Link</option>
+      <option value="Video">Video</option>
+      <option value="Audio">Audio</option>
+      <option value="Image">Image</option>
+      <option value="File">Document</option>
+      <option value="Link">Link</option>
     </select>
 
     <label for="source">Source:</label>
@@ -31,7 +32,7 @@
    
     <!-- External Link -->
     <label for="external_url">Or provide an external link (optional):</label>
-    <input type="url" id="external_url" name="external_url" placeholder="https://example.com"><br><br>
+    <input type="url" id="external_url" name="external_url" placeholder="https://example.com">
 
     {% if errors.general %}
       <p class="error">{{ errors.general }}</p><br>

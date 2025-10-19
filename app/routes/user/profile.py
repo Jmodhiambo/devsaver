@@ -23,7 +23,10 @@ async def profile(request: Request, session_user: Optional[str] = Depends(check_
 
     user_id = request.session.get("user")
     user = get_user_by_id(user_id)
-    return templates.TemplateResponse("pages/profile.html", {"request": request, "title": "Profile Update", "errors": {}, "data": user, "msg": msg})
+    return templates.TemplateResponse(
+        "pages/profile.html",
+        {"request": request, "title": "Profile Update", "errors": {}, "user": session_user, "data": user, "msg": msg}
+    )
 
 @router.post("/profile/")
 async def update_profile(request: Request, form: UserUpdate = Depends(UserUpdate.as_form), session_user: Optional[str] = Depends(check_current_user)) -> RedirectResponse:
@@ -55,7 +58,10 @@ async def change_password_get(request: Request, session_user: Optional[str] = De
     if msg == "password_changed":
         msg = "Password changed successfully!"
 
-    return templates.TemplateResponse("pages/change_password.html", {"request": request, "title": "Change Password", "errors": {}, "data": {}, "msg": msg})
+    return templates.TemplateResponse(
+        "pages/change_password.html",
+        {"request": request, "title": "Change Password", "errors": {},"user": session_user, "data": {}, "msg": msg}
+    )
 
 @router.post("/profile/change-password", response_class=HTMLResponse)
 async def change_password_post(

@@ -5,7 +5,7 @@ import os
 from fastapi import APIRouter, Request, HTTPException, UploadFile, File, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from app.schemas.resource import ResourceCreate, ResourceUpdate
-from app.services.resource_services import add_resource, remove_resource, list_resources_by_user, get_resource, update_resource_details
+from app.services.resource_services import add_resource, remove_resource, list_resources_by_user, get_resource, update_resource_details, get_resource_by_original_filename_service
 from app.utils.auth.session import check_current_user
 from app.core.templates import templates
 from uuid import uuid4
@@ -23,13 +23,18 @@ def resource_upload(request: Request, session_user: str = Depends(check_current_
     if not session_user:
         raise HTTPException(status_code=401, detail="Unauthorized Access!")
     
-    return templates.TemplateResponse("pages/upload_resource.html", {"request": request, "title": "Upload Resource", "data": {}, "errors": {}})
+    return templates.TemplateResponse("pages/upload_resource.html", {"request": request, "title": "Upload Resource", "user": session_user, "data": {}, "errors": {}})
 
 @router.post("/resources/upload", response_class=HTMLResponse)
 async def handle_resource_upload(request: Request, form: ResourceCreate = Depends(ResourceCreate.as_form), file: UploadFile = File(None), session_user: str = Depends(check_current_user)) -> HTMLResponse:
     """Handle resource upload form submission."""
     if not session_user:
         raise HTTPException(status_code=401, detail="Unauthorized Access!")
+    
+    user_id = request.session.get("user")
+    
+    if file.filename and get_resource_by_original_filename_service(user_id, file.filename):
+        return RedirectResponse(url="/dashboard?msg=A resource with the same filename already exists.", status_code=303)
 
     request.state.template = "pages/upload_resource.html"
 
@@ -48,8 +53,6 @@ async def handle_resource_upload(request: Request, form: ResourceCreate = Depend
     else:
         external_url = form.external_url
         original_filename = None
-
-    user_id = request.session.get("user")
     
     success = add_resource(
         title=form.title, type=form.type, source=form.source, user_id=user_id, description=form.description, tags=form.tags, url=external_url, original_filename=original_filename
@@ -70,11 +73,11 @@ def delete_resource(resource_id: int, request: Request, session_user: str = Depe
     
     remove_resource(resource_id)
 
-    resouces = list_resources_by_user(request.session.get("user"))
+    resources = list_resources_by_user(request.session.get("user"))
 
     return templates.TemplateResponse(
         "pages/dashboard.html", 
-        {"request": request, "title": "Dashboard", "resources": resouces, "msg": "Resource has been successfully deleted."}
+        {"request": request, "title": "Dashboard", "resources": resources, "user": session_user, "msg": "Resource has been successfully deleted."}
     )
 
 @router.get("/resources/edit-resource/{resource_id}", response_class=HTMLResponse)
@@ -87,7 +90,7 @@ def edit_resource(resource_id: int, request: Request, session_user: str = Depend
     if not resource:
         raise ValueError("Resource not found!")
 
-    return templates.TemplateResponse("pages/edit_resource.html", {"request": request, "title": "Edit Resource", "resource": resource, "errors": {}})
+    return templates.TemplateResponse("pages/edit_resource.html", {"request": request, "title": "Edit Resource", "resource": resource, "user": session_user, "errors": {}})
 
 @router.post("/resources/edit-resource/{resource_id}", response_class=HTMLResponse)
 async def handle_edit_resource(resource_id: int, request: Request, form: ResourceUpdate = Depends(ResourceUpdate.as_form), session_user: str = Depends(check_current_user)) -> HTMLResponse:

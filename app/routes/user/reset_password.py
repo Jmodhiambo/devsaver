@@ -30,7 +30,10 @@ async def reset_password_page(request: Request):
     """Render the reset password page."""
     msg = request.query_params.get("msg")
     email = request.query_params.get("email")
-    return templates.TemplateResponse("pages/reset_password.html", {"request": request, "title": "Reset Password", "msg": msg, "email": email, "errors": {}, "data": {}})
+    return templates.TemplateResponse(
+        "pages/reset_password.html",
+        {"request": request, "title": "Reset Password", "msg": msg, "email": email, "errors": {}, "data": {}}
+    )
 
 @router.post("/reset-password")
 async def reset_password_action(request: Request, form: PasswordResetRequest = Depends(PasswordResetRequest.as_form)): #email: str = Form(...), new_password: str = Form(...), confirm_password: str = Form(...)

@@ -83,7 +83,7 @@ def main():
     try:
         if args.command == "create-user":
             user = register_user(args.username, args.email, args.password, args.fullname)
-            print(f"✅ User created: {user}")
+            print(f"User created: {user}")
 
         elif args.command == "get-user":
             user = get_user_by_username_service(args.username)
@@ -97,7 +97,7 @@ def main():
 
         elif args.command == "delete-user":
             success = remove_user(args.user_id)
-            print("✅ User deleted." if success else "❌ Failed to delete user.")
+            print("User deleted." if success else "Failed to delete user.")
 
         elif args.command == "update-user":
             fields = {
@@ -110,7 +110,7 @@ def main():
             update_fields = {k: v for k, v in fields.items() if v is not None}
 
             updated = update_user_profile(args.user_id, **update_fields)
-            print(f"✅ User updated: {updated}" if updated else "❌ User not found.")
+            print(f"User updated: {updated}" if updated else "User not found.")
 
         elif args.command == "add-resource":
             res = add_resource(
@@ -123,7 +123,7 @@ def main():
                 user_id=args.user_id,
                 original_filename=args.original_filename,
             )
-            print(f"✅ Resource added: {res}")
+            print(f"Resource added: {res}")
 
         elif args.command == "list-resources":
             resources = list_resources_by_user(args.user_id)
@@ -137,11 +137,11 @@ def main():
 
         elif args.command == "mark-read":
             res = mark_as_read(args.resource_id)
-            print(f"✅ Marked as read: {res}")
+            print(f"Marked as read: {res}")
 
         elif args.command == "toggle-star":
             res = toggle_star(args.resource_id)
-            print(f"⭐ Star toggled: {res}")
+            print(f"Star toggled: {res}")
 
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")

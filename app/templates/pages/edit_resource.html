@@ -8,18 +8,19 @@
     <label for="title">Title:</label>
     <input type="text" id="title" name="title" value="{{ resource.title }}" required>
     <label for="description">Description:</label>
-    <textarea id="description" name="description" value="{{ resource.description }}"></textarea>
+    <textarea id="description" name="description">{{ resource.description|e }}</textarea>
 
     <label for="tags">Tags (comma separated):</label>
     <input type="text" id="tags" name="tags" value="{{ resource.tags }}">
 
     <label for="type">Type:</label><br>
     <select id="type" name="type" required>
-      <option value="{{ resource.type }}" selected>{{ resource.type }}</option> <!-- Selected the current type -->
-      <option value="video">Video</option>
-      <option value="image">Image</option>
-      <option value="document">Document</option>
-      <option value="link">Link</option>
+      <option value="{{ resource.type  }}" selected>{{ resource.type }}</option> <!-- Selected the current type -->
+      <option value="Video">Video</option>
+      <option value="Audio">Audio</option>
+      <option value="Image">Image</option>
+      <option value="File">File</option>
+      <option value="Link">Link</option>
     </select>
 
     <label for="source">Source:</label>

@@ -80,6 +80,12 @@ def get_resources_by_type(user_id: int, resource_type: str) -> list[ResourceSche
         resources = session.query(Resource).filter(Resource.user_id == user_id, Resource.type == resource_type).all()
         return [ResourceSchema.model_validate(res) for res in resources] if resources else []
     
+def get_resource_by_original_filename(user_id: int, original_filename: str) -> Optional[ResourceSchema]:
+    """Retrieve a resource by its original filename."""
+    with get_session() as session:
+        resource = session.query(Resource).filter(Resource.user_id == user_id, Resource.original_filename == original_filename).first()
+        return ResourceSchema.model_validate(resource) if resource else None
+    
 def get_starred_resources(user_id: int) -> list[ResourceSchema]:
     """Retrieve all starred resources for a given user."""
     with get_session() as session:

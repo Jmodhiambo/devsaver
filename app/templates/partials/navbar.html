@@ -3,17 +3,20 @@
     <h2>DevSaver</h2>
   </div>
   <div class="nav-links">
-  <a href="/register">Register</a> |
-  <a href="/dashboard">Dashboard</a> |
-  <a href="/">Home</a> |
-  <a href="/login">Login</a> |
-  <a href="/logout">Logout</a> |
-  <a href="/profile">Profile</a> |
-  <a href="/admin">Admin</a> |
-  <a href="/users/">Usrs</a> |
-  <a href="/profile/change-password">PWD</a> |
-  <a href="/rss/">Rss</a> |
-  <a href="/resources/upload">Resources</a>
+    <ul>
+      {% if user %}
+      <a href="/">Home</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/profile">Profile</a>
+      <a href="/resources/upload">Resources</a>
+      <a href="/profile/change-password">Change Password</a>
+      <a href="/logout">Logout</a>
+      {% else %}
+      <a href="/">Home</a>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+      {% endif %}
+    </ul>
   </div>
 </nav>
 <hr>

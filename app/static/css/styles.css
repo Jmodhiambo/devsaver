@@ -23,30 +23,62 @@ body {
 main {
   flex: 1;
   display: flex;
-  justify-content: left;  /* center horizontally */
-  align-items: top;      /* center vertically */
-  width : 100%;
+  justify-content: center;  /* center horizontally */
+  align-items: flex-start;      /* center vertically */
+  padding: 140px 20px 20px; /* navbar (60) + filter (say 60–80) */
+  background-color: #f5f5f5;
+}
+
+.admin-container {
+  flex: 1;
+  display: flex;
+  width: 100%;
+  margin: 50px, 10px, 50px, 10px;
+  padding: 10px;
+  background-color: #f5f5f5;
 }
 
 /* Footer stays at bottom */
 footer {
   background: #f5f5f5;
+  justify-content: space-between;
   padding: 1rem;
-  text-align: center;
-  font-size: 0.9rem;
   color: #555;
+  width: auto;
+  background-color: rgb(155, 156, 133);
+}
+.footer-links a {
+  color: orange;
+  text-align: left;
+  text-decoration: none;
+  margin: 0 2px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+  color: darkorange;
+}
+.footer-text {
+  text-align: center;
 }
 nav {
-  background-color: rgb(155, 156, 133);
-  color: orange;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background-color: rgb(155, 156, 133);
+    color: orange;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .nav-links a {
-  padding-left: 10px;
+  padding: 10px;
   color: orange;
   text-decoration: none;
   margin: 0 2px;
@@ -56,6 +88,13 @@ nav {
 .nav-links a:hover {
   text-decoration: underline;
   color: darkorange;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  padding: 10px;
 }
 
 button {
@@ -80,6 +119,7 @@ button:hover {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   width: 500px;
   text-align: center;
+  margin: 0 auto;
 }
 
 .form-container form {
@@ -106,13 +146,13 @@ label {
 }
 
 .alert {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-    text-align: center; 
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  text-align: center; 
 }
 
 .error {
@@ -128,65 +168,228 @@ label {
 
 /* User Admin Page */
 .user-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .user-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid #ccc;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    background: #fdfdfd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  background: #fdfdfd;
 }
 
 span {
-    flex: 1;
-    text-align: left;
-    width: 150px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+.resource {
+    width: 550px;
 
-
+}
+.user {
+  width: 320px;
+}
+.resource-id .resource-download {
+  text-align: center;
+  width: 50px;
+  padding-left: 20px;
+}
+.center {
+  text-align: center;
+  background-color: darkorange;
+  border-radius: 3px;
+}
+.count {
+  text-align: right;
+}
 .delete-form,.edit-form {
-    margin: 0;
+  margin: 0;
 }
 
 .edit-btn {
-    background: #350bab;
-    color: white;
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 3px;
-    cursor: pointer;
-    margin: 0 10px;
+  background: #350bab;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 3px;
+  cursor: pointer;
+  margin: 0 10px;
 }
 .edit-btn:hover {
-    background: darkblue;
+  background: darkblue;
 }
-
 .delete-btn {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 3px;
-    cursor: pointer;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 .delete-btn:hover {
-    background: #c0392b;
-}
-
-.admin-cotainer {
-    width: 600px;
-    margin: 0 auto;
-    text-align: left;
+  background: #c0392b;
 }
 
 /* End of User Admin Page */
+
+textarea {
+  resize: none;
+  height: 50px;
+  margin-top: 10px;
+}
+
+select {
+  padding: 3px;
+}
+
+/* Dashboard Filters */
+/* Filter Container Layout */
+.filter-container {
+    position: fixed;
+    top: 60px; /* same as navbar height */
+    left: 0;
+    right: 0;
+    background-color: #111;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    z-index: 999;
+    border-bottom: 1px solid #222;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+/*  Filter Buttons */
+.resource-filter {
+    margin: 0;
+    display: inline-flex;
+}
+
+.resource-filter button {
+    padding: 6px 14px;
+    border: 1px solid orange;
+    background-color: #111;
+    color: #ddd;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.resource-filter button:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+/* Highlight the active filter */
+.resource-filter.active button {
+    background-color: darkorange;
+    color: #fff;
+}
+
+/*   Search Form */
+.search-form {
+    display: flex !important;         /* override global form rule */
+    flex-direction: row !important;   /* force row layout */
+    align-items: center;
+    margin-left: auto;
+    max-width: 250px;
+    min-width: 180px;
+    flex: 1 1 auto;
+    padding: 0 !important;           /* remove the global form padding */
+}
+.search-form .resource-search {
+    flex: 1;
+    padding: 6px 10px;
+    font-size: 14px;
+    background-color: #333;
+    color: #ddd;
+    border: 1px solid #444;
+    border-radius: 4px 0 0 4px;
+    box-sizing: border-box;
+    margin: 0;
+    width: auto;
+    display: inline-block;
+}
+
+.search-form .resource-search::placeholder {
+    color: #888;
+}
+
+.search-form .search-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    border: 1px solid #444;
+    border-left: none;
+    background-color: orange;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    white-space: nowrap;
+    margin: 0;
+    transition: background-color 0.2s ease;
+}
+
+.search-form .search-btn:hover {
+    background-color: darkorange;
+}
+
+/* Resource Count*/
+.filter-container .count {
+    font-size: 14px;
+    color: #ccc;
+    margin-left: auto;
+}
+
+/*  Responsive */
+@media (max-width: 600px) {
+    .filter-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-form {
+        margin-left: 0;
+        max-width: 100%;
+    }
+
+    .filter-container .count {
+        margin-left: 0;
+        margin-top: 8px;
+        text-align: right;
+    }
+}
+
+/* Home Page */
+.hero-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+}
+.hero-content h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+.btn { padding: 0.8rem 1.5rem; border-radius: 0.5rem; text-decoration: none; }
+.btn.primary { background: #3b82f6; color: white; }
+.btn.secondary { border: 1px solid white; color: white; }
+.features { padding: 4rem 2rem; background: #f9fafb; }
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+.feature-card { background: white; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; }
+.about-container { display: flex; align-items: center; gap: 2rem; padding: 4rem 2rem; }
+.testimonials, .cta, .footer { padding: 4rem 2rem; text-align: center; }
+.footer { background: #0f172a; color: white; }
+.footer-grid { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+/* Home Page End*/

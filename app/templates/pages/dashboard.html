@@ -5,24 +5,63 @@
 
     <div class="resource-list">
       
-      <h2>Current Resources</h2><br>
+      <!-- <h1 class="center">Current Resources</h1><br> -->
+
+      <div class="filter-container">
+        <form method="get" action="/dashboard" class="resource-filter">
+          <input type="hidden" name="filter" value="All">
+          <button type="submit" class="{{ 'active' if type == 'All' else '' }}">All</button>
+        </form>
+
+        <form method="get" action="/dashboard" class="resource-filter">
+          <input type="hidden" name="filter" value="Video">
+          <button type="submit" class="{{ 'active' if type == 'Video' else '' }}">Videos</button>
+        </form>
+
+        <form method="get" action="/dashboard" class="resource-filter">
+          <input type="hidden" name="filter" value="Audio">
+          <button type="submit" class="{{ 'active' if type == 'Audio' else '' }}">Audios</button>
+        </form>
+
+        <form method="get" action="/dashboard" class="resource-filter">
+          <input type="hidden" name="filter" value="Image">
+          <button type="submit" class="{{ 'active' if type == 'Image' else '' }}">Images</button>
+        </form>
+
+        <form method="get" action="/dashboard" class="resource-filter">
+          <input type="hidden" name="filter" value="File">  
+          <button type="submit" class="{{ 'active' if type == 'File' else '' }}">Files</button>
+        </form>
+
+        <form method="get" action="/dashboard" class="resource-filter">
+          <input type="hidden" name="filter" value="Link">
+          <button type="submit" class="{{ 'active' if type == 'Link' else '' }}">Links</button>
+        </form>
+
+        <form method="get" action="/dashboard" class="search-form">
+          <input type="text" name="tags" placeholder="Search by tags" class="resource-search">
+          <button type="submit" class="search-btn">Search</button>
+        </form>
+
+        <span class="count">Total Resources: {{ resources|length if resources else 0 }}</span><br>
+      </div>
 
       {% if msg %}
         <p class="alert alert-success">{{ msg }}</p><br>
       {% endif %}
 
-      {% if resources|length > 0 %}
-        <p>Total Resources: {{ resources|length }}</p>      
+      {% if resources %}
         {% for resource in resources %}
           <div class="user-row">
-            <h3>{{ resource.title }}</h3>
-            <p>{{ resource.id }}</p>
+            <span class="resource"><strong>{{ resource.title }}</strong></span>
+            <!-- <span class="resource-id">{{ resource.id }}</span> -->
+            <span class="resource-download"><strong>{{ resource.type }}</strong></span>
             {% if resource.url and resource.original_filename %}
-              <a href="{{ resource.url }}" download="{{ resource.original_filename }}">
-                Download {{ resource.original_filename }}
-              </a>
+              <span class="resource">{{ resource.original_filename }}</span>
+              <span class="resource-download"><a href="{{ resource.url }}" download="{{ resource.original_filename }}">Download</a></span>
             {% else %}
-              <a href="{{ resource.url }}" target="_blank">Open Resource</a>
+              <span class="resource">{{ resource.url }}</span>
+              <span class="resource-download"><a href="{{ resource.url }}" target="_blank">Open Resource</a></span>
             {% endif %}
 
             <a href="/resources/edit-resource/{{ resource.id }}" ><button class="edit-btn">Edit</button></a>
@@ -34,12 +73,14 @@
           </div>
 
         {% endfor %}
+      {% elif type %}
+        <p>No <strong>{{ type }}s</strong> found. Start by uplolading a new <strong>{{ type if type != 'Tag Search' else 'Resource' }}</strong>!</p>
 
       {% else %}
         <p>No resources found. Start by uploading a new resource!</p>
       {% endif %}
 
-      <br><br><a href="/resources/upload" class="upload-link"><button class="edit-btn">Upload New Resource</button></a>
+      <br><a href="/resources/upload" class="upload-link"><button class="upload-btn">Add New Resource</button></a>
     </div>
   </div>
 

@@ -1,23 +1,65 @@
 #!/usr/bin/env python3
-"""Dashboard page route."""
+"""Dashboard page route (refactored to use GET filters)."""
 
 from fastapi import APIRouter, Request, Depends, HTTPException
-from app.utils.auth.session import check_current_user
 from typing import Optional
+from app.utils.auth.session import check_current_user
 from app.core.templates import templates
-from app.services.resource_services import list_resources_by_user
-
+from app.services.resource_services import (
+    list_resources_by_user,
+    list_resources_by_type,
+    list_resources_by_tag,
+)
 
 router = APIRouter()
 
-@router.get("/dashboard")
-async def dashboard(request: Request, user: Optional[str] = Depends(check_current_user)):
-    """Render the home page."""
-    if not user:
+
+@router.get("/dashboard", name="dashboard")
+async def dashboard(
+    request: Request,
+    session_user: Optional[str] = Depends(check_current_user),
+    filter: Optional[str] = None,
+    tags: Optional[str] = None,
+):
+    """Render the dashboard with optional filtering by type or tags."""
+    if not session_user:
         raise HTTPException(status_code=401, detail="Unauthorized Access!")
-    
-    msg = request.query_params.get("msg")
-    
+
     user_id = request.session.get("user")
-    resources = list_resources_by_user(user_id)
-    return templates.TemplateResponse("pages/dashboard.html", {"request": request, "title": "Welcome to the DevSaver App", "resources": resources, "msg": msg})
+    msg = request.query_params.get("msg")
+
+    resources = []
+
+    # Tag-based search takes priority
+    if tags:
+        tag_list = [t.strip() for t in tags.split(",") if t.strip()]
+        found = []
+        for tag in tag_list:
+            tag_resources = list_resources_by_tag(user_id, tag)
+            for r in tag_resources:
+                if r not in found:
+                    found.append(r)
+        resources = found
+        active_type = "Tag Search"
+
+    # Otherwise, filter by resource type
+    elif filter and filter.lower() != "all":
+        resources = list_resources_by_type(user_id, filter.capitalize())
+        active_type = filter.capitalize()
+
+    # Otherwise, show all resources
+    else:
+        resources = list_resources_by_user(user_id)
+        active_type = "All"
+
+    return templates.TemplateResponse(
+        "pages/dashboard.html",
+        {
+            "request": request,
+            "title": "Welcome to the DevSaver App",
+            "resources": resources,
+            "user": session_user,
+            "msg": msg,
+            "type": active_type,
+        },
+    )
