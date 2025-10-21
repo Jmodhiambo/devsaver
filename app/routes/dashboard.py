@@ -2,10 +2,12 @@
 """Dashboard page route (refactored to use GET filters)."""
 
 from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi.responses import HTMLResponse
 from typing import Optional
 from app.utils.auth.session import check_current_user
 from app.core.templates import templates
 from app.services.resource_services import (
+    get_resource_by_id_service,
     list_resources_by_user,
     list_resources_by_type,
     list_resources_by_tag,
@@ -62,4 +64,31 @@ async def dashboard(
             "msg": msg,
             "type": active_type,
         },
+)
+
+@router.get("/dashboard/{resource_id}/preview", response_class=HTMLResponse)
+async def resource_preview(request: Request, resource_id: int, session_user: Optional[str] = Depends(check_current_user)):
+    """Render the resource preview page."""
+    if not session_user:
+        raise HTTPException(status_code=401, detail="Unauthorized Access!")
+
+    resource = get_resource_by_id_service(resource_id)
+    if not resource:
+        return HTMLResponse("<p>Resource not found!</p>", status_code=404)
+    
+    return templates.TemplateResponse(
+        "partials/resource_preview.html",
+        {"request": request, "resource": resource}
+    )
+
+@router.get("/dashboard/{resource_id}/view", response_class=HTMLResponse)
+async def resource_view(request: Request, resource_id: int, session_user: Optional[str] = Depends(check_current_user)):
+    if not session_user:
+        raise HTTPException(status_code=401, detail="Unauthorized Access!")
+    resource = get_resource_by_id_service(resource_id)
+    if not resource:
+        raise HTTPException(status_code=404, detail="Resource not found")
+    return templates.TemplateResponse(
+        "pages/resource_view.html",
+        {"request": request, "resource": resource, "user": session_user}
     )

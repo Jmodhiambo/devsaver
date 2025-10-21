@@ -1,131 +1,98 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- Hero Section -->
-<section class="hero-section">
-  <div class="container">
-    <div class="hero-content">
-      <h1>Organize. Save. Grow as a Developer.</h1>
-      <p class="tagline">
-        DevSaver helps you collect, organize, and revisit your favorite developer resources — 
-        from articles to tools, snippets, and beyond.
-      </p>
-      <div class="hero-buttons">
-        <a href="/register" class="btn primary">Get Started for Free</a>
-        <a href="/login" class="btn secondary">Sign In</a>
-      </div>
-    </div>
-    <div class="hero-image">
-      <img src="/static/images/devsaver_hero.svg" alt="DevSaver workspace">
-    </div>
-  </div>
-</section>
+<div class="home-container">
 
-<!-- Features Section -->
-<section class="features">
-  <div class="container">
-    <h2 class="section-title">Why DevSaver?</h2>
-    <div class="feature-grid">
-      <div class="feature-card">
-        <i class="icon">&#128190;</i>
-        <h3>Save Your Resources</h3>
-        <p>Store articles, code snippets, and tools you find useful in one organized hub — never lose a great find again.</p>
-      </div>
-      <div class="feature-card">
-        <i class="icon">&#9881;</i>
-        <h3>Powerful Categorization</h3>
-        <p>Tag and filter by type, language, or project. DevSaver makes it easy to find what you need when you need it.</p>
-      </div>
-      <div class="feature-card">
-        <i class="icon">&#128640;</i>
-        <h3>Boost Productivity</h3>
-        <p>Spend less time searching and more time coding. Revisit your saved tools and snippets with ease.</p>
-      </div>
-      <div class="feature-card">
-        <i class="icon">&#128187;</i>
-        <h3>Built for Developers</h3>
-        <p>DevSaver is crafted with developers in mind — simple, fast, and focused on your workflow.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- About Section -->
-<section class="about">
-  <div class="container about-container">
-    <div class="about-text">
-      <h2>Built by Developers, for Developers</h2>
+  <!-- Intro Section -->
+  <section class="intro">
+    <div class="intro-content">
+      <h1 class="h1">Welcome to DevSaver</h1>
       <p>
-        DevSaver started as a simple idea — a personal tool to store helpful dev links and snippets. 
-        Today, it’s a lightweight web platform that helps developers focus, learn, and stay organized. 
-        Whether you’re a student, freelancer, or professional engineer, DevSaver grows with you.
+        DevSaver is a simple yet powerful web application designed to help developers 
+        save, organize, and manage the resources that matter most. These resources range from documentation links 
+        and tutorials to snippets, tools, and articles.
       </p>
-      <a href="/register" class="btn primary">Start Saving</a>
+      <p>
+        Whether you’re a student learning to code, a professional managing project references, 
+        or a curious developer exploring new frameworks, DevSaver keeps your learning and 
+        productivity resources in one easy-to-access place.
+      </p>
     </div>
-    <div class="about-image">
-      <img src="/static/images/about_devsaver.svg" alt="Developers using DevSaver">
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- Testimonials Section -->
-<section class="testimonials">
-  <div class="container">
-    <h2 class="section-title">What Developers Are Saying</h2>
-    <div class="testimonial-grid">
-      <div class="testimonial">
-        <p>"DevSaver has completely changed how I store my coding references. It’s like having my own mini Stack Overflow!"</p>
-        <h4>— Alex, Full-Stack Developer</h4>
-      </div>
-      <div class="testimonial">
-        <p>"Finally a tool that understands developers. Clean, simple, and fast — exactly what I need."</p>
-        <h4>— Priya, Backend Engineer</h4>
-      </div>
-      <div class="testimonial">
-        <p>"I use DevSaver daily to keep track of resources while learning new frameworks. It’s my go-to dev notebook."</p>
-        <h4>— Daniel, Software Learner</h4>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- Purpose Section -->
+  <section class="purpose">
+    <h2 class="h2">What DevSaver Does</h2>
+    <p>
+      DevSaver provides a centralized space for managing your developer resources. 
+      It’s built to reduce the chaos of endless bookmarks and scattered notes.  
+      With DevSaver, you can:
+    </p>
+    <ul>
+      <li>Save useful resources like articles, repositories, tools, or snippets.</li>
+      <li>Organize your resources with categories and tags.</li>
+      <li>Access everything from one clean dashboard.</li>
+      <li>Upload and update your resources with ease.</li>
+    </ul>
+  </section>
 
-<!-- CTA Section -->
-<section class="cta">
-  <div class="container">
-    <h2>Start Building Smarter with DevSaver</h2>
-    <p>Join developers already saving time and boosting their workflow efficiency.</p>
-    <a href="/register" class="btn primary large">Get Started Now</a>
-  </div>
-</section>
+  <!-- How It Works -->
+  <section class="how-it-works">
+    <h2 class="h2">How It Works</h2>
+    <p>
+      Using DevSaver is simple and intuitive:
+    </p>
+    <ol>
+      <li><strong>Create an account</strong>: Register for free to get started.</li>
+      <li><strong>Save resources</strong>: Add links, notes, or uploads you want to revisit later.</li>
+      <li><strong>Organize by category</strong>: Group your items by language, topic, or type.</li>
+      <li><strong>Access anytime</strong>: All your saved items are securely available in your dashboard.</li>
+    </ol>
+  </section>
 
-<!-- Footer Section -->
-<!-- <footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <h3>DevSaver</h3>
-        <p>Your developer resource companion.</p>
-      </div>
-      <div class="footer-links">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a href="/login">Login</a></li>
-          <li><a href="/register">Register</a></li>
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-social">
-        <h4>Connect</h4>
-        <ul>
-          <li><a href="https://github.com/">GitHub</a></li>
-          <li><a href="https://twitter.com/">Twitter</a></li>
-          <li><a href="https://linkedin.com/">LinkedIn</a></li>
-        </ul>
-      </div>
-    </div>
-    <p class="copyright">© {{ current_year }} DevSaver. Built with ❤️ by Developers.</p>
-  </div>
-</footer> -->
+  <!-- Behind the Project -->
+  <section class="about-devsaver">
+    <h2 class="h2">About DevSaver</h2>
+    <p>
+      DevSaver was built with the idea that every developer deserves a smarter way to manage their digital workspace.
+      It’s developed using <strong>FastAPI</strong> for the backend, with a clean and extensible structure that supports 
+      future integrations and scalability.
+    </p>
+    <p>
+      The project demonstrates practical skills in building RESTful APIs, managing user sessions, 
+      handling CRUD operations, and integrating templating with Jinja2.
+    </p>
+  </section>
+
+  <!-- Why It Matters -->
+  <section class="why-it-matters">
+    <h2 class="h2">Why DevSaver Matters</h2>
+    <p>
+      Developers today consume vast amounts of learning materials and tools.  
+      Without a structured system, important resources are often lost among dozens of browser tabs or bookmarks.  
+      DevSaver bridges that gap by turning the chaos into a searchable, organized resource base that grows with you.
+    </p>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta">
+    {% if user %}
+      <h2 class="h2">Add Resource</h2>
+      <p>
+        Add a new resource to your collection.
+      </p>
+      <a href="/resources/upload" class="btn primary">Add Resource</a>
+      <a href="/dashboard" class="btn secondary">View Resources</a>
+    {% else %}
+      <h2 class="h2">Start Organizing Today</h2>
+      <p>
+        Create an account and start saving your resources in one place.
+      </p>
+      <a href="/register" class="btn primary">Get Started</a>
+      <a href="/login" class="btn secondary">Login</a>
+    {% endif %}
+  </section>
+
+</div>
 
 {% endblock %}

@@ -24,7 +24,7 @@ def add_resource(
         title=title, description=description, tags=tags, type=type, url=url, source=source, user_id=user_id, original_filename=original_filename
     )
 
-def get_resource(resource_id: int) -> Optional[dict]:
+def get_resource_by_id_service(resource_id: int) -> Optional[dict]:
     """Get a resource by its ID."""
     return resource_crud.get_resource_by_id(resource_id)
 

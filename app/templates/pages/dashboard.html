@@ -5,39 +5,15 @@
 
     <div class="resource-list">
       
-      <!-- <h1 class="center">Current Resources</h1><br> -->
-
       <div class="filter-container">
-        <form method="get" action="/dashboard" class="resource-filter">
-          <input type="hidden" name="filter" value="All">
-          <button type="submit" class="{{ 'active' if type == 'All' else '' }}">All</button>
-        </form>
-
-        <form method="get" action="/dashboard" class="resource-filter">
-          <input type="hidden" name="filter" value="Video">
-          <button type="submit" class="{{ 'active' if type == 'Video' else '' }}">Videos</button>
-        </form>
-
-        <form method="get" action="/dashboard" class="resource-filter">
-          <input type="hidden" name="filter" value="Audio">
-          <button type="submit" class="{{ 'active' if type == 'Audio' else '' }}">Audios</button>
-        </form>
-
-        <form method="get" action="/dashboard" class="resource-filter">
-          <input type="hidden" name="filter" value="Image">
-          <button type="submit" class="{{ 'active' if type == 'Image' else '' }}">Images</button>
-        </form>
-
-        <form method="get" action="/dashboard" class="resource-filter">
-          <input type="hidden" name="filter" value="File">  
-          <button type="submit" class="{{ 'active' if type == 'File' else '' }}">Files</button>
-        </form>
-
-        <form method="get" action="/dashboard" class="resource-filter">
-          <input type="hidden" name="filter" value="Link">
-          <button type="submit" class="{{ 'active' if type == 'Link' else '' }}">Links</button>
-        </form>
-
+        {% for filter_type in ['All', 'Video', 'Audio', 'Image', 'File', 'Link'] %}
+          <form method="get" action="/dashboard" class="resource-filter">
+            <input type="hidden" name="filter" value="{{ filter_type }}">
+            <button type="submit" class="{{ 'active' if type == filter_type else '' }}">
+              {{ filter_type }}{{ 's' if filter_type != 'All' else '' }}
+            </button>
+          </form>
+        {% endfor %}
         <form method="get" action="/dashboard" class="search-form">
           <input type="text" name="tags" placeholder="Search by tags" class="resource-search">
           <button type="submit" class="search-btn">Search</button>
@@ -54,7 +30,6 @@
         {% for resource in resources %}
           <div class="user-row">
             <span class="resource"><strong>{{ resource.title }}</strong></span>
-            <!-- <span class="resource-id">{{ resource.id }}</span> -->
             <span class="resource-download"><strong>{{ resource.type }}</strong></span>
             {% if resource.url and resource.original_filename %}
               <span class="resource">{{ resource.original_filename }}</span>
@@ -66,6 +41,8 @@
 
             <a href="/resources/edit-resource/{{ resource.id }}" ><button class="edit-btn">Edit</button></a>
 
+            <a href="javascript:void(0);" onclick="openModal('{{ resource.id }}')" class="view-btn">View</a>
+
             <form action="{{ url_for('delete-resource', resource_id=resource.id) }}" method="post" class="delete-form">
                 <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this resource?');">Delete</button>
             </form>
@@ -74,7 +51,11 @@
 
         {% endfor %}
       {% elif type %}
-        <p>No <strong>{{ type }}s</strong> found. Start by uplolading a new <strong>{{ type if type != 'Tag Search' else 'Resource' }}</strong>!</p>
+        {% if type == "All" %}
+          <p>No resources found. Start by uploading a new resource!</p>
+        {% else %}
+          <p>No <strong>{{ type }}s</strong> found. Start by adding a new <strong>{{ type if type != 'Tag Search' else 'Resource' }}</strong>!</p>
+        {% endif %}
 
       {% else %}
         <p>No resources found. Start by uploading a new resource!</p>
@@ -84,4 +65,16 @@
     </div>
   </div>
 
+  <!-- Resource Preview Modal -->
+  <div id="resourceModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <div id="modal-body"></div>
+      <a id="fullViewBtn" href="#" class="btn">Full View</a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', path='js/modal.js') }}"></script>
 {% endblock %}

@@ -4,7 +4,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from app.schemas.resource import ResourcePublic as ResourceSchema
-from app.services.resource_services import get_resource, list_all_resources
+from app.services.resource_services import get_resource_by_id_service, list_all_resources
 from app.utils.auth.session import check_current_user
 
 router = APIRouter()
@@ -26,7 +26,7 @@ def get_resource_by_id(resource_id: int, session_user: str = Depends(check_curre
     if not session_user:
         raise HTTPException(status_code=401, detail="Unauthorized Access!")
     
-    resource = get_resource(resource_id)
+    resource = get_resource_by_id_service(resource_id)
     if not resource:
         return JSONResponse(content={"message": f"Resource with id {resource_id} not found"}, status_code=404)
     return resource

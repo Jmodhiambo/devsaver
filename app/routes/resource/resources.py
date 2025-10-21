@@ -5,7 +5,8 @@ import os
 from fastapi import APIRouter, Request, HTTPException, UploadFile, File, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from app.schemas.resource import ResourceCreate, ResourceUpdate
-from app.services.resource_services import add_resource, remove_resource, list_resources_by_user, get_resource, update_resource_details, get_resource_by_original_filename_service
+from app.services.resource_services import (
+    add_resource, remove_resource, list_resources_by_user, get_resource_by_id_service, update_resource_details, get_resource_by_original_filename_service)
 from app.utils.auth.session import check_current_user
 from app.core.templates import templates
 from uuid import uuid4
@@ -86,7 +87,7 @@ def edit_resource(resource_id: int, request: Request, session_user: str = Depend
     if not session_user:
         raise HTTPException(status_code=401, detail="Unauthorized Access!")
     
-    resource = get_resource(resource_id)
+    resource = get_resource_by_id_service(resource_id)
     if not resource:
         raise ValueError("Resource not found!")
 
@@ -105,7 +106,7 @@ async def handle_edit_resource(resource_id: int, request: Request, form: Resourc
         raise HTTPException(status_code=401, detail="Unauthorized Access!")
     
     # Verify resource exists and owned by user
-    resource = get_resource(resource_id)
+    resource = get_resource_by_id_service(resource_id)
     if not resource or resource.user_id != user_id:
         raise HTTPException(status_code=404, detail="You are not authorized to edit this resource.")
     
