@@ -1,57 +1,223 @@
-# API Project
+# 🧠 DevSaver – A Developer’s Knowledge Hub API
 
-DevSaver is a backend project I am building to practice and improve my skills in Python, SQLAlchemy, and testing with pytest.
-It includes a CRUD API with proper test isolation using factories (`factory_boy` + `faker`) and in-memory SQLite for faster testing.
+> **DevSaver** is a full-featured backend project built to power a developer-oriented knowledge hub — a place where developers can **upload, manage, and share learning resources** such as videos, articles, and tools.
+>
+> The project started as a way to deepen my understanding of **backend architecture, testing, and modern Python development**, and has evolved into a clean, testable, and extensible API system.
 
-## Features
+![DevSaver Dashboard Preview](assets/dashboard_preview.png)
+*Dashboard Preview – simple, functional, and developer-focused.*
 
-* CRUD operations for users and resources
-* SQLAlchemy ORM with a test database
-* Unit and integration testing using pytest
-* Factory-based fixtures for generating test data
+---
 
-## Tech Stack
+## 🚀 Project Overview
 
-* Python 3.8+
-* SQLAlchemy
-* Pytest
-* Factory Boy + Faker
+**DevSaver** is not just a CRUD API — it’s a complete exploration of:
 
-## Getting Started
+* Building scalable RESTful APIs using **FastAPI**
+* Structuring projects with **SQLAlchemy ORM**
+* Implementing robust **testing pipelines** with **pytest**
+* Ensuring **data integrity and test isolation** using **factory_boy** and **Faker**
+* Designing **reusable components** for future production-ready backends
 
-1. Clone the repository:
+The project also includes a **minimal frontend layer** for resource upload and visualization, enabling developers to interact with the API seamlessly.
 
-   ```bash
-   git clone https://github.com/Jmodhiambo/devsaver
-   cd devsaver
-   ```
+---
 
-2. Create a virtual environment and activate it:
+## 🧩 Features
 
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate   # On Linux/Mac
-   venv\Scripts\activate      # On Windows
-   ```
+* **User Management** – Register, view, and manage user profiles
+* **Resource Management** – Upload, categorize, and fetch coding resources
+* **File Uploads** – Support for resource files (e.g., `.mp4`, `.pdf`)
+* **Database Integration** – Persistent storage with SQLAlchemy ORM
+* **Factory-Based Test Data** – Deterministic and isolated testing using factory_boy
+* **In-Memory SQLite for Tests** – Blazing-fast test runs without affecting production data
+* **Modular Code Structure** – Clean, extensible, and production-ready layout
+* **HTML Templates (Optional)** – Simple UI for uploads and dashboard visualization
 
-3. Set up the .env file locally (Change the Keys)
-   ```bash
-   cp .env.example .env
-   ```
+---
 
-4. Install dependencies:
+## ⚙️ Tech Stack
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+| Category                | Technology                     |
+| ----------------------- | ------------------------------ |
+| **Language**            | Python 3.8+                    |
+| **Framework**           | FastAPI                        |
+| **ORM**                 | SQLAlchemy                     |
+| **Database**            | SQLite (Development & Testing) |
+| **Testing**             | pytest, factory_boy, Faker     |
+| **Environment**         | dotenv (.env) Configuration    |
+| **Frontend (Optional)** | Jinja2 Templates, HTML5, CSS3  |
 
-5. Run the tests:
+---
 
-   ```bash
-   pytest
-   ```
+## 🧪 Testing
 
-## Next Steps
+DevSaver follows a **test-driven development (TDD)** mindset.
+Tests are organized for **unit**, **integration**, and **functional** coverage with the following principles:
 
-I’m continuously learning and improving this project.
-Future updates may include authentication, better API documentation, and deployment setup.
+* Tests run in an **isolated environment** using an in-memory SQLite database
+* Test data is generated dynamically using **factory_boy** and **Faker**
+* CI-friendly structure for continuous integration setups (e.g., GitHub Actions)
+
+Run all tests with:
+
+```bash
+pytest -v
+```
+
+You’ll see detailed output showing model, route, and integration test coverage.
+
+---
+
+## 🧰 Getting Started
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/Jmodhiambo/devsaver
+cd devsaver
+```
+
+### 2️⃣ Create and Activate a Virtual Environment
+
+```bash
+python3 -m venv venv
+source venv/bin/activate   # Linux/Mac
+venv\Scripts\activate      # Windows
+```
+
+### 3️⃣ Environment Setup
+
+Copy and customize the example `.env` file:
+
+```bash
+cp .env.example .env
+```
+
+Configure your own keys, database URL, and environment variables as needed.
+
+### 4️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5️⃣ Run the Application
+
+```bash
+uvicorn api.v1.app:app --reload
+```
+
+Access the app at **[http://127.0.0.1:8000](http://127.0.0.1:8000)**.
+
+### 6️⃣ Run Tests
+
+```bash
+pytest
+```
+
+---
+
+## 🧱 Project Structure
+
+```
+devsaver/
+│
+├── api/
+│   ├── v1/
+│   │   ├── app.py               # Entry point for the API
+│   │   ├── views/
+│   │   │   ├── users.py         # User routes
+│   │   │   └── resources.py     # Resource routes
+│   │   └── models/
+│   │       ├── user.py
+│   │       └── resource.py
+│   └── templates/
+│       ├── dashboard.html
+│       └── upload_resource.html
+│
+├── tests/
+│   ├── factories/
+│   ├── test_users.py
+│   └── test_resources.py
+│
+├── requirements.txt
+├── .env.example
+├── README.md
+└── run.py
+```
+
+---
+
+## 🌱 Learning Outcomes
+
+Building DevSaver helped me strengthen:
+
+* Modular API design and clean project architecture
+* ORM data modeling and relationships
+* Automated testing with **pytest** and factories
+* Working with environment variables securely
+* Handling file uploads in backend APIs
+* Designing APIs that can scale to production
+* Understanding the real-world workflow of backend projects
+
+---
+
+## 📸 UI Preview
+
+| Dashboard                                  | Upload Resource                       |
+| ------------------------------------------ | ------------------------------------- |
+| ![Dashboard](assets/dashboard_preview.png) | ![Upload](assets/upload_resource.png) |
+
+*(Screenshots from the minimal developer dashboard interface)*
+![alt text](image.png)
+
+---
+
+## 🧭 Future Roadmap
+
+* [ ] Add JWT-based authentication
+* [ ] Integrate Swagger/OpenAPI documentation
+* [ ] Implement role-based access control
+* [ ] Add Docker support for containerized deployment
+* [ ] Deploy to Render / Railway / AWS
+* [ ] Include CI/CD setup with GitHub Actions
+
+---
+
+## 👨‍💻 Author
+
+**Martin Odhiambo**
+Backend Developer | Python | JavaScript | REST APIs
+
+📫 **Connect with me:**
+
+* GitHub: [@Jmodhiambo](https://github.com/Jmodhiambo)
+* LinkedIn: [Martin Odhiambo](https://linkedin.com/in/martin-odhiambo-13b04817b/)
+
+---
+
+## ⭐ Contribute
+
+Interested in collaborating or extending DevSaver?
+Feel free to **fork the repo**, **open issues**, or submit **pull requests**.
+Constructive feedback and ideas are always welcome!
+
+```bash
+git checkout -b feature/awesome-idea
+git commit -m "Add new feature"
+git push origin feature/awesome-idea
+```
+
+---
+
+## 🏁 License
+
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
+
+---
+
+### ✨ Final Note
+
+> DevSaver is more than a learning project — it’s a reflection of how much you can grow as a developer when you **build, test, and refine real-world systems**.
+> If you’re reading this, I’d love for you to try it out, break it, improve it, and share what you build next.
