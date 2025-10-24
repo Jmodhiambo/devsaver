@@ -4,7 +4,7 @@
 >
 > The project started as a way to deepen my understanding of **backend architecture, testing, and modern Python development**, and has evolved into a clean, testable, and extensible API system.
 
-![DevSaver Dashboard Preview](assets/dashboard_preview.png)
+![DevSaver Dashboard Preview](app/static/images/dashboard.png)
 *Dashboard Preview – simple, functional, and developer-focused.*
 
 ---
@@ -104,8 +104,21 @@ pip install -r requirements.txt
 
 ### 5️⃣ Run the Application
 
+You can run the DevSaver backend in two ways using run.py:
+
+To launch the API server:
 ```bash
-uvicorn api.v1.app:app --reload
+python run.py api
+```
+
+To run CLI-based commands:
+```bash
+python run.py cli
+```
+
+Alternatively, you can directly run FastAPI with uvicorn:
+```bash
+uvicorn main:app --reload
 ```
 
 Access the app at **[http://127.0.0.1:8000](http://127.0.0.1:8000)**.
@@ -123,28 +136,38 @@ pytest
 ```
 devsaver/
 │
-├── api/
-│   ├── v1/
-│   │   ├── app.py               # Entry point for the API
-│   │   ├── views/
-│   │   │   ├── users.py         # User routes
-│   │   │   └── resources.py     # Resource routes
+├── app/
+│   ├── cli/                     # Command-line interface commands
+│   ├── core/                    # Core configurations and app setup
+│   ├── crud/                    # CRUD operations
+│   ├── models/                  # ORM models
+│   │   └── engine/              # DB engine initialization
+│   ├── routes/                  # API route groups
+│   │   ├── resource/
+│   │   └── user/
+│   ├── schemas/                 # Pydantic schemas
+│   ├── services/                # Business logic and services
+│   ├── static/                  # CSS, JS, and image files
+│   │   ├── css/
+│   │   ├── images/
+│   │   └── js/
+│   ├── templates/               # Jinja2 templates
+│   │   ├── errors/
+│   │   ├── pages/
+│   │   └── partials/
+│   ├── test/                    # Tests and test factories
+│   │   ├── factories/
 │   │   └── models/
-│   │       ├── user.py
-│   │       └── resource.py
-│   └── templates/
-│       ├── dashboard.html
-│       └── upload_resource.html
+│   ├── uploads/                 # Uploaded resource files
+│   └── utils/                   # Helper utilities
+│       ├── auth/
+│       └── pydantic/
 │
-├── tests/
-│   ├── factories/
-│   ├── test_users.py
-│   └── test_resources.py
-│
+├── main.py                      # FastAPI entrypoint
+├── run.py                       # Unified CLI and API runner
 ├── requirements.txt
 ├── .env.example
-├── README.md
-└── run.py
+└── README.md
 ```
 
 ---
@@ -167,10 +190,9 @@ Building DevSaver helped me strengthen:
 
 | Dashboard                                  | Upload Resource                       |
 | ------------------------------------------ | ------------------------------------- |
-| ![Dashboard](assets/dashboard_preview.png) | ![Upload](assets/upload_resource.png) |
+| ![Dashboard](app/static/images/dashboard.png) | ![Upload](app/static/images/upload.png) |
 
 *(Screenshots from the minimal developer dashboard interface)*
-![alt text](image.png)
 
 ---
 
