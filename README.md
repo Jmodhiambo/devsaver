@@ -4,7 +4,7 @@
 >
 > The project started as a way to deepen my understanding of **backend architecture, testing, and modern Python development**, and has evolved into a clean, testable, and extensible API system.
 
-![DevSaver Dashboard Preview](app/static/images/dashboard.png)
+![DevSaver Dashboard Preview](app/static/images/dashboard.PNG)
 *Dashboard Preview – simple, functional, and developer-focused.*
 
 ---
@@ -190,7 +190,7 @@ Building DevSaver helped me strengthen:
 
 | Dashboard                                  | Upload Resource                       |
 | ------------------------------------------ | ------------------------------------- |
-| ![Dashboard](app/static/images/dashboard.PNG) | ![Upload](app/static/images/upload.png) |
+| ![Dashboard](app/static/images/dashboard.PNG) | ![Upload](app/static/images/upload.PNG) |
 
 *(Screenshots from the minimal developer dashboard interface)*
 
