@@ -190,7 +190,7 @@ Building DevSaver helped me strengthen:
 
 | Dashboard                                  | Upload Resource                       |
 | ------------------------------------------ | ------------------------------------- |
-| ![Dashboard](app/static/images/dashboard.png) | ![Upload](app/static/images/upload.png) |
+| ![Dashboard](app/static/images/dashboard.PNG) | ![Upload](app/static/images/upload.png) |
 
 *(Screenshots from the minimal developer dashboard interface)*
 
