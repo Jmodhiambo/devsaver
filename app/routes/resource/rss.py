@@ -28,5 +28,5 @@ def get_resource_by_id(resource_id: int, session_user: str = Depends(check_curre
     
     resource = get_resource_by_id_service(resource_id)
     if not resource:
-        return JSONResponse(content={"message": f"Resource with id {resource_id} not found"}, status_code=404)
+        return JSONResponse(content={"message": f"Resource not found"}, status_code=404)
     return resource

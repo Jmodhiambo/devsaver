@@ -1,6 +1,6 @@
 <div class="preview-container">
   <h3>{{ resource.title }}</h3>
-  <p><strong>Type:</strong> {{ resource.type }}</p>
+  <p><strong>Type:</strong> <span class="view-span">{{ resource.type }}</span></p><br>
 
   {% if resource.type == 'Video' %}
     <video controls width="100%">

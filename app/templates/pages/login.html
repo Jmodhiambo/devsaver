@@ -25,6 +25,12 @@
         Password reset successful! Please log in.
     </div>
   {% endif %}
+    
+  {% if msg == "unauthorized" %}
+    <br><div class="alert alert-error">
+      You are not authorized to view this page.
+    </div>
+  {% endif %}
 
   <h1>Login to DevSaver</h1>
 

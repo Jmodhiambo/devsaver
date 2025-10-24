@@ -6,7 +6,7 @@ from fastapi import APIRouter, Request, HTTPException, UploadFile, File, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from app.schemas.resource import ResourceCreate, ResourceUpdate
 from app.services.resource_services import (
-    add_resource, remove_resource, list_resources_by_user, get_resource_by_id_service, update_resource_details, get_resource_by_original_filename_service)
+    add_resource, remove_resource, list_resources_by_user, get_resource_by_id_service, update_resource_details, get_resource_by_original_filename_service, get_resource_by_url_service)
 from app.utils.auth.session import check_current_user
 from app.core.templates import templates
 from uuid import uuid4
@@ -32,14 +32,17 @@ async def handle_resource_upload(request: Request, form: ResourceCreate = Depend
     if not session_user:
         raise HTTPException(status_code=401, detail="Unauthorized Access!")
     
-    user_id = request.session.get("user")
-    
-    if file.filename and get_resource_by_original_filename_service(user_id, file.filename):
-        return RedirectResponse(url="/dashboard?msg=A resource with the same filename already exists.", status_code=303)
-
     request.state.template = "pages/upload_resource.html"
-
-    if file and not form.external_url: # File upload is optional, so checks if file:
+    
+    user_id = request.session.get("user")
+    resource_by_id = get_resource_by_original_filename_service(user_id, file.filename)
+    resource_by_url = get_resource_by_url_service(user_id, form.external_url)
+    if resource_by_id:
+        return RedirectResponse(url=f"/resources/edit-resource/{resource_by_id.id}?msg=resource_exists", status_code=303)
+    if resource_by_url:
+        return RedirectResponse(url=f"/resources/edit-resource/{resource_by_url.id}?msg=resource_exists", status_code=303)
+    
+    if file and file.filename: # File upload is optional, so checks if file:
         # Generate a unique filename to avoid collisions
         file_extension = os.path.splitext(file.filename)[1]
         unique_filename = f"devsaver-{uuid4().hex}{file_extension}"
@@ -60,9 +63,7 @@ async def handle_resource_upload(request: Request, form: ResourceCreate = Depend
     )
 
     if success:
-        return RedirectResponse(url="/dashboard?msg=Resource uploaded successfully!", status_code=303)
-        # resources = list_resources_by_user(request.session.get("user"))
-        # return templates.TemplateResponse("pages/dashboard.html", {"request": request, "title": "Dashboard", "resources": resources, "msg": "Resource uploaded successfully!"})
+        return RedirectResponse(url="/dashboard?msg=uploaded", status_code=303)
     
     raise ValueError("Failed to upload resource. Please try again.")
 
@@ -72,14 +73,37 @@ def delete_resource(resource_id: int, request: Request, session_user: str = Depe
     if not session_user:
         raise HTTPException(status_code=401, detail="Unauthorized Access!")
     
+    # Step 1: Get the resource first (so we can delete its file)
+    resource = get_resource_by_id_service(resource_id)
+    if not resource:
+        raise HTTPException(status_code=404, detail="Resource not found")
+    
+    # Step 2: If the resource was uploaded (local file), delete it from disk
+    if resource.original_filename and resource.url.startswith("/uploads/"):
+        # Build the full path on disk
+        file_path = os.path.join(UPLOAD_DIR, os.path.basename(resource.url))
+        if os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                raise HTTPException(status_code=500, detail=f"Failed to delete file: {str(e)}")
+
+    # Step 3: Delete metadata from the database
     remove_resource(resource_id)
 
+    # Step 4: Re-render dashboard with updated data
     resources = list_resources_by_user(request.session.get("user"))
-
     return templates.TemplateResponse(
-        "pages/dashboard.html", 
-        {"request": request, "title": "Dashboard", "resources": resources, "user": session_user, "msg": "Resource has been successfully deleted."}
-    )
+        "pages/dashboard.html",
+        {
+            "request": request,
+            "title": "Dashboard",
+            "resources": resources,
+            "user": session_user,
+            "msg": "Resource has been successfully deleted."
+        }
+)
+
 
 @router.get("/resources/edit-resource/{resource_id}", response_class=HTMLResponse)
 def edit_resource(resource_id: int, request: Request, session_user: str = Depends(check_current_user)) -> HTMLResponse:
@@ -87,11 +111,14 @@ def edit_resource(resource_id: int, request: Request, session_user: str = Depend
     if not session_user:
         raise HTTPException(status_code=401, detail="Unauthorized Access!")
     
+    msg = request.query_params.get("msg")
+    if msg:
+        msg = "Resource already exists! Update or confirm if it is the existing resource below."
     resource = get_resource_by_id_service(resource_id)
     if not resource:
         raise ValueError("Resource not found!")
 
-    return templates.TemplateResponse("pages/edit_resource.html", {"request": request, "title": "Edit Resource", "resource": resource, "user": session_user, "errors": {}})
+    return templates.TemplateResponse("pages/edit_resource.html", {"request": request, "title": "Edit Resource", "resource": resource, "msg": msg, "user": session_user, "errors": {}})
 
 @router.post("/resources/edit-resource/{resource_id}", response_class=HTMLResponse)
 async def handle_edit_resource(resource_id: int, request: Request, form: ResourceUpdate = Depends(ResourceUpdate.as_form), session_user: str = Depends(check_current_user)) -> HTMLResponse:
@@ -132,11 +159,11 @@ async def handle_edit_resource(resource_id: int, request: Request, form: Resourc
     }
 
     if not field_to_update:
-        return RedirectResponse(url="/dashboard?msg=No changes detected.", status_code=303)
+        return RedirectResponse(url="/dashboard?msg=no-change", status_code=303)
 
     success = update_resource_details(resource_id, user_id=user_id, **field_to_update)
 
     if success:
-        return RedirectResponse(url="/dashboard?msg=Resource updated successfully!", status_code=303)
+        return RedirectResponse(url="/dashboard?msg=updated", status_code=303)
             
     raise HTTPException(status_code=400, detail="Failed to update resource. Please try again.")

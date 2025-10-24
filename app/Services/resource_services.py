@@ -28,6 +28,12 @@ def get_resource_by_id_service(resource_id: int) -> Optional[dict]:
     """Get a resource by its ID."""
     return resource_crud.get_resource_by_id(resource_id)
 
+def get_resource_by_url_service(user_id: int, url: str) -> Optional[dict]:
+    "Get a resource by the url"
+    resource = resource_crud.get_resource_by_url(user_id, url)
+    print("Resource service: ", resource)
+    return resource
+
 def get_resource_by_original_filename_service(user_id: int, original_filename: str) -> Optional[dict]:
     """Get a resource by its original filename."""
     return resource_crud.get_resource_by_original_filename(user_id, original_filename)

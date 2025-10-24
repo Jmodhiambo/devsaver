@@ -29,6 +29,12 @@ async def dashboard(
 
     user_id = request.session.get("user")
     msg = request.query_params.get("msg")
+    if msg == "uploaded":
+        msg = "Resource uploaded successfully!"
+    if msg == "updated":
+        msg = "Resource updated successfully!"
+    if msg == "no-change":
+        msg = "No changes detected."
 
     resources = []
 
@@ -42,7 +48,7 @@ async def dashboard(
                 if r not in found:
                     found.append(r)
         resources = found
-        active_type = "Tag Search"
+        active_type = "Tag"
 
     # Otherwise, filter by resource type
     elif filter and filter.lower() != "all":

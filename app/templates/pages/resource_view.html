@@ -2,15 +2,27 @@
 {% block content %}
 <div class="resource-view-container">
 
-  <h2>{{ resource.title }}</h2>
+  <!-- Breadcrumb navigation -->
+  <nav class="breadcrumb">
+    <a href="/dashboard">Dashboard</a>
+    {% if resource.type %}
+      &nbsp;»&nbsp;
+      <a href="/dashboard?filter={{ resource.type }}">{{ resource.type }}s</a>
+    {% endif %}
+    &nbsp;»&nbsp;
+    <span>{{ resource.title }}</span>
+  </nav>
+
   <p><strong>Type:</strong>
-    <span style="color:orange;">{{ resource.type }}</span>
-</p>
+    <span class="view-span">{{ resource.type }}</span>
+  </p><br>
 
   {% if resource.description %}
-    <p><strong>Description:</strong>
-        <span style="color:orange;">{{ resource.description }}</span>
-    </p>
+    <div>
+      <p><strong>Description:</strong>
+          <span class="view-span">{{ resource.description }}</span>
+      </p>
+    </div>
   {% endif %}
 
   <br>
@@ -35,7 +47,7 @@
 
     {% elif resource.type == 'File' %}
       <div class="file-box">
-        <p><strong>File:</strong> {{ resource.original_filename }}</p>
+        <p><strong>File Name:</strong> {{ resource.original_filename }}</p>
         <a href="{{ resource.url }}" download>Download File</a>
       </div>
 
@@ -47,15 +59,14 @@
   {% if resource.tags %}
     <br><p><strong>Tags:</strong>
       {% for tag in resource.tags.split(',') %}
-        <span class="tag" style="color: orange;">{{ tag }}</span>
+        <span class="tag">{{ tag }}</span>
       {% endfor %}
     </p>
   {% endif %}
 
   <div class="resource-actions">
-    <a href="/dashboard" class="btn">← Back to Dashboard</a>
-    <a href="/resources/edit-resource/{{ resource.id }}" class="btn">Edit</a>
-    <a href="{{ resource.url }}" target="_blank" class="btn">Open Resource</a>
+    <a href="/resources/edit-resource/{{ resource.id }}" class="btn primary">Update</a>
+    <a href="{{ resource.url }}" target="_blank" class="btn secondary">Open Resource</a>
   </div>
 
 </div>

@@ -22,8 +22,7 @@ async function openModal(resourceId) {
 document.addEventListener('DOMContentLoaded', function() {
   const modal = document.getElementById('resourceModal');
   const closeBtn = document.getElementById('closeModal');
-  const modalBody = document.getElementById('modal-body');
-  const fullViewBtn = document.getElementById('fullViewBtn');
+
 
   closeBtn.addEventListener('click', () => {
     modal.style.display = 'none';

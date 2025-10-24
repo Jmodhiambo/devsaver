@@ -86,6 +86,13 @@ def get_resource_by_original_filename(user_id: int, original_filename: str) -> O
         resource = session.query(Resource).filter(Resource.user_id == user_id, Resource.original_filename == original_filename).first()
         return ResourceSchema.model_validate(resource) if resource else None
     
+def get_resource_by_url(user_id: int, url: str) -> Optional[ResourceSchema]:
+    """Retrieve a resource by its URL."""
+    with get_session() as session:
+        resource = session.query(Resource).filter(Resource.user_id == user_id, Resource.url == url).first()
+        print("Resource crud: ", resource)
+        return ResourceSchema.model_validate(resource) if resource else None
+    
 def get_starred_resources(user_id: int) -> list[ResourceSchema]:
     """Retrieve all starred resources for a given user."""
     with get_session() as session:
@@ -262,9 +269,3 @@ def get_most_common_types(user_id: int, limit: int = 10) -> list[str]:
                 type_count[type_value] = type_count.get(type_value, 0) + 1
         sorted_types = sorted(type_count.items(), key=lambda item: item[1], reverse=True)
         return [type_value for type_value, count in sorted_types[:limit]]
-    
-    def url_exists(url: str) -> bool | None:
-        """Check if a resource with the given URL already exists."""
-        with get_session() as session:
-            resource = session.query(Resource).filter(Resource.url == url).first()
-            return resource.to_dict() if resource else None
