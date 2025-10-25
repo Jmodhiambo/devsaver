@@ -1,6 +1,6 @@
 # DevSaver – A Developer’s Knowledge Hub API
 
-> **DevSaver** is a full-featured backend project built to power a developer-oriented knowledge hub — a place where developers can **upload, manage, and share learning resources** such as videos, articles, and tools.
+> **DevSaver** is a full-featured backend project built to power a developer-oriented knowledge hub. It is a place where developers can **upload and manage dev resources** such as videos, articles, and tools.
 >
 > The project started as a way to deepen my understanding of **backend architecture, testing, and modern Python development**, and has evolved into a clean, testable, and extensible API system.
 
