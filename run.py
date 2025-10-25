@@ -12,7 +12,7 @@ from app.cli.command import main as cli_main
 
 def run_api() -> None:
     """Run FastAPI server."""
-    uvicorn.run("app.api:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
 
 def run_cli() -> None:
     """Run CLI commands."""
