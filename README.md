@@ -1,4 +1,4 @@
-# 🧠 DevSaver – A Developer’s Knowledge Hub API
+# DevSaver – A Developer’s Knowledge Hub API
 
 > **DevSaver** is a full-featured backend project built to power a developer-oriented knowledge hub — a place where developers can **upload, manage, and share learning resources** such as videos, articles, and tools.
 >
@@ -9,7 +9,7 @@
 
 ---
 
-## 🚀 Project Overview
+## Project Overview
 
 **DevSaver** is not just a CRUD API — it’s a complete exploration of:
 
@@ -23,7 +23,7 @@ The project also includes a **minimal frontend layer** for resource upload and v
 
 ---
 
-## 🧩 Features
+## Features
 
 * **User Management** – Register, view, and manage user profiles
 * **Resource Management** – Upload, categorize, and fetch coding resources
@@ -36,7 +36,7 @@ The project also includes a **minimal frontend layer** for resource upload and v
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack
 
 | Category                | Technology                     |
 | ----------------------- | ------------------------------ |
@@ -50,7 +50,7 @@ The project also includes a **minimal frontend layer** for resource upload and v
 
 ---
 
-## 🧪 Testing
+## Testing
 
 DevSaver follows a **test-driven development (TDD)** mindset.
 Tests are organized for **unit**, **integration**, and **functional** coverage with the following principles:
@@ -69,7 +69,7 @@ You’ll see detailed output showing model, route, and integration test coverage
 
 ---
 
-## 🧰 Getting Started
+## Getting Started
 
 ### 1️⃣ Clone the Repository
 
@@ -131,7 +131,7 @@ pytest
 
 ---
 
-## 🧱 Project Structure
+## Project Structure
 
 ```
 devsaver/
@@ -172,7 +172,7 @@ devsaver/
 
 ---
 
-## 🌱 Learning Outcomes
+## Learning Outcomes
 
 Building DevSaver helped me strengthen:
 
@@ -186,7 +186,7 @@ Building DevSaver helped me strengthen:
 
 ---
 
-## 📸 UI Preview
+## UI Preview
 
 | Dashboard                                  | Upload Resource                       |
 | ------------------------------------------ | ------------------------------------- |
@@ -196,7 +196,7 @@ Building DevSaver helped me strengthen:
 
 ---
 
-## 🧭 Future Roadmap
+## Future Roadmap
 
 * [ ] Add JWT-based authentication
 * [ ] Integrate Swagger/OpenAPI documentation
@@ -207,7 +207,7 @@ Building DevSaver helped me strengthen:
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Martin Odhiambo**
 Backend Developer | Python | JavaScript | REST APIs
@@ -219,7 +219,7 @@ Backend Developer | Python | JavaScript | REST APIs
 
 ---
 
-## ⭐ Contribute
+## Contribute
 
 Interested in collaborating or extending DevSaver?
 Feel free to **fork the repo**, **open issues**, or submit **pull requests**.
@@ -233,13 +233,13 @@ git push origin feature/awesome-idea
 
 ---
 
-## 🏁 License
+## License
 
 This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
 
 ---
 
-### ✨ Final Note
+### Final Note
 
 > DevSaver is more than a learning project — it’s a reflection of how much you can grow as a developer when you **build, test, and refine real-world systems**.
 > If you’re reading this, I’d love for you to try it out, break it, improve it, and share what you build next.
