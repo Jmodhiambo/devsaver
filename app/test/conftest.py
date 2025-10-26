@@ -4,7 +4,7 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.models.engine.db import Base
+from app.core.database import Base
 from app.models.user import User
 from app.models.resource import Resource
 

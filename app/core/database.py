@@ -3,11 +3,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session, DeclarativeBase
 from collections.abc import Generator
-# import os
 from contextlib import contextmanager
 
 DATABASE_URL = "sqlite:///./devsaver.db"
-# DEBUG = os.getenv("DEVSAVER_DEBUG", "0") == "1" # The equation results in False or True based on the environment variable
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(

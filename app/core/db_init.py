@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Database initialization for DevSaver."""
 
-from app.models.engine.db import Base, engine
+from app.core.database import Base, engine
 from app.core.logging_config import logger
 from sqlalchemy import inspect
 

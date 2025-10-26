@@ -3,7 +3,7 @@
 
 from sqlalchemy import Integer, String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.models.engine.db import Base
+from app.core.database import Base
 from app.models.resource import Resource
 from typing import List, Optional
 from datetime import datetime, timezone

@@ -2,7 +2,6 @@
 """Logging configuration for DevSaver."""
 
 import logging
-from logging.handlers import RotatingFileHandler
 import os
 
 # Create logs directory if it doesn’t exist
@@ -11,16 +10,29 @@ os.makedirs(LOG_DIR, exist_ok=True)
 
 LOG_FILE = os.path.join(LOG_DIR, "app.log")
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    handlers=[
-        RotatingFileHandler(LOG_FILE, maxBytes=5_000_000, backupCount=5),
-        logging.StreamHandler()
-    ],
-)
+class ContextFilter(logging.Filter):
+    """Inject request context (like user_id, path, and method) into logs."""
+    def filter(self, record):
+        from app.core.logging_middleware import request_context
+        
+        context = request_context.get({})
+        record.user_id = context.get("user_id", "-")
+        record.path = context.get("path", "-")
+        record.method = context.get("method", "-")
+        return True
 
-# Get the main logger
+# Create and configure the main logger
 logger = logging.getLogger("DevSaver")
+logger.setLevel(logging.INFO)
+
+# Console handler
+handler = logging.StreamHandler()
+formatter = logging.Formatter(
+    "[%(asctime)s] [%(levelname)s] [user=%(user_id)s] [%(method)s %(path)s] %(message)s",
+    "%Y-%m-%d %H:%M:%S",
+)
+handler.setFormatter(formatter)
+
+# Attach filter and handler
+handler.addFilter(ContextFilter())
+logger.addHandler(handler)

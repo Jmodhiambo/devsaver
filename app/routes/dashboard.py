@@ -35,6 +35,8 @@ async def dashboard(
         msg = "Resource updated successfully!"
     if msg == "no-change":
         msg = "No changes detected."
+    if msg == "password_changed":
+        msg = "Password changed successfully!"
 
     resources = []
 

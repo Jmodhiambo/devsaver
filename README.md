@@ -88,7 +88,7 @@ venv\Scripts\activate      # Windows
 
 ### 3️⃣ Environment Setup
 
-Copy and customize the example `.env` file:
+Copy and customize the example `.env` file with your key
 
 ```bash
 cp .env.example .env
@@ -140,8 +140,8 @@ devsaver/
 │   ├── cli/                     # Command-line interface commands
 │   ├── core/                    # Core configurations and app setup
 │   ├── crud/                    # CRUD operations
+|   ├── logs/
 │   ├── models/                  # ORM models
-│   │   └── engine/              # DB engine initialization
 │   ├── routes/                  # API route groups
 │   │   ├── resource/
 │   │   └── user/
@@ -166,6 +166,7 @@ devsaver/
 ├── main.py                      # FastAPI entrypoint
 ├── run.py                       # Unified CLI and API runner
 ├── requirements.txt
+├── structure.txt
 ├── .env.example
 └── README.md
 ```

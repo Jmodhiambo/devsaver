@@ -8,6 +8,7 @@ from app.services.user_services import authenticate_user
 from app.utils.auth.session import check_current_user
 from typing import Optional
 from app.core.templates import templates
+from app.core.logging_config import logger
 
 router = APIRouter()
 
@@ -27,6 +28,7 @@ async def login_action(request: Request, form: UserLogin = Depends(UserLogin.as_
     user = authenticate_user(form.username, form.password)
     if not user:
         # Triggers ValueError → handled by global handler
+        logger.error("Login failed! Invalid username or password.")
         raise ValueError("Login failed! Invalid username or password.")
 
     request.session["user"] = user["id"]
@@ -38,4 +40,5 @@ async def logout_action(request: Request, user: Optional[str] = Depends(check_cu
     if not user:
         return RedirectResponse("/login", status_code=303)
     request.session.pop("user", None) # request.session.clear()
+    logger.info(f"User ID {user} logged out successfully.")
     return RedirectResponse("/login?msg=logged_out", status_code=303)

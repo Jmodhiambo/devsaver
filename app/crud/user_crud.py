@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """User CRUD operations for DevSaver."""
 
-from app.models.engine.db import get_session
+from app.core.database import get_session
 from app.models.user import User
 from typing import Optional
 from app.schemas.user import UserInDB, User as UserSchema

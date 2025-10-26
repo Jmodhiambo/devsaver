@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Resource CRUD operations for DevSaver."""
 
-from app.models.engine.db import get_session
+from app.core.database import get_session
 from app.models.resource import Resource
 from typing import Optional
 from app.schemas.resource import Resource as ResourceSchema

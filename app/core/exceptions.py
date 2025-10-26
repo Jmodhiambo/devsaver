@@ -6,8 +6,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import RedirectResponse, HTMLResponse
 from app.core.templates import templates
 from app.utils.pydantic.validation_error import validation_path, normalize_errors
-# from jinja2 import TemplateError
-# from pydantic import ValidationError
+
 
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     """Handle HTTP exceptions."""
@@ -50,14 +49,3 @@ async def value_error_exception_handler(request: Request, exc: ValueError) -> HT
         {"request": request, "title": "Validation Error", "errors": {"general": str(exc)}, "data": form_data}, 
         status_code=400
     )
-
-# async def template_exception_handler(request: Request, exc: TemplateError) -> HTMLResponse:
-#     """Handle Jinja2 template errors."""
-#     # Log the real error for debugging
-#     print(f"Template rendering failed: {exc}")
-
-#     return templates.TemplateResponse(
-#         "errors/500.html", 
-#         {"request": request}, 
-#         status_code=400
-#     )

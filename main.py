@@ -11,15 +11,18 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.exceptions import RequestValidationError
 import app.core.exceptions as e
+from app.core.logging_middleware import  ContextualASGIMiddleware #ContextualLoggingMiddleware,
 from app.core.logging_config import logger
 from app.core.db_init import init_db_tables
-from app.models.engine.db import engine
+from app.core.database import engine
 
 
 app = FastAPI(title="DevSaver", description="A tool to save and manage development resources.")
 
-# Session secret key for the SessionMiddleware
+# Middlewares
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
+app.add_middleware(ContextualASGIMiddleware)
+# app.add_middleware(ContextualLoggingMiddleware)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
@@ -41,7 +44,7 @@ app.include_router(admin.router, tags=["admin"])
 app.include_router(rss.router, tags=["rss"])
 app.include_router(resources.router, tags=["resources"])
 
-# 🧩 Auto-create DB tables on startup
+# Auto-create DB tables on startup
 @app.on_event("startup")
 async def startup_event():
     logger.info("Starting up DevSaver...")
