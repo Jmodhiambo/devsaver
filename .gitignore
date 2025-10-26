@@ -20,7 +20,13 @@ build/
 
 # Database
 devsaver.db
-app/uploads/
+
+# Ignore everything in the uploads and logs folders
+app/uploads/*
+app/logs/*
+
+# But keep this one file to ensure the folders exists in git
+!app/uploads/.gitkeep
 
 # VS Code folder
 .vscode/*
@@ -30,3 +36,6 @@ app/uploads/
 
 # Database 
 .devdbrc
+
+# Inspect DB Mapping
+inspect_db.py
