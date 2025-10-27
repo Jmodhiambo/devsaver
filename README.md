@@ -140,7 +140,7 @@ devsaver/
 │   ├── cli/                     # Command-line interface commands
 │   ├── core/                    # Core configurations and app setup
 │   ├── crud/                    # CRUD operations
-|   ├── logs/
+|   ├── logs/                    # App Logs
 │   ├── models/                  # ORM models
 │   ├── routes/                  # API route groups
 │   │   ├── resource/
