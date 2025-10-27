@@ -40,7 +40,7 @@ The project also includes a **minimal frontend layer** for resource upload and v
 
 | Category                | Technology                     |
 | ----------------------- | ------------------------------ |
-| **Language**            | Python 3.8+                    |
+| **Language**            | Python 3.11+                    |
 | **Framework**           | FastAPI                        |
 | **ORM**                 | SQLAlchemy                     |
 | **Database**            | SQLite (Development & Testing) |
