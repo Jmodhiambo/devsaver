@@ -15,7 +15,7 @@ build/
 .coverage
 .pytest_cache/
 
-# Environment variables
+# Environment variables file
 .env
 
 # Database
